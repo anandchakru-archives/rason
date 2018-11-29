@@ -1,0 +1,16 @@
+# TRACE|DEBUG|INFO|WARN|ERROR
+logging:
+  level:
+    root: WARN
+  file: rason.log
+spring: 
+  application: 
+    name: rason	
+  main: 
+    banner-mode: "off"
+server:
+  port: ${port:9090}
+rason: 
+  slugGenMaxRetry: 10
+  maxCacheSize: 2000
+  maxCacheLifeMinutes: 1440

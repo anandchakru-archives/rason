@@ -1,0 +1,4 @@
+rason: 
+  slugGenMaxRetry: 5
+  maxCacheSize: 50
+  maxCacheLifeMinutes: 10
