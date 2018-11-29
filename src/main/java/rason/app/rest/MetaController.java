@@ -1,6 +1,7 @@
 package rason.app.rest;
 
 import static rason.app.util.RasonConstant.HB_PREFIX;
+import static rason.app.util.RasonConstant.URI_BASE;
 import static rason.app.util.RasonConstant.URI_HB;
 import static rason.app.util.RasonConstant.URI_STATS;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class MetaController {
 	@Autowired
 	private RasonSettings settings;
 
-	@GetMapping(value = URI_HB, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@GetMapping(value = { URI_BASE, URI_HB }, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StrResponse hb() {
 		return new StrResponse(HB_PREFIX + System.currentTimeMillis());
 	}
