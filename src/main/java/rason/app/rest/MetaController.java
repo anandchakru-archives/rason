@@ -1,10 +1,12 @@
 package rason.app.rest;
 
+import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
 import static rason.app.util.RasonConstant.HB_PREFIX;
 import static rason.app.util.RasonConstant.URI_BASE;
 import static rason.app.util.RasonConstant.URI_HB;
 import static rason.app.util.RasonConstant.URI_STATS;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,8 +20,9 @@ import rason.app.service.RasonSettings;
 
 @RestController
 public class MetaController {
+	@Qualifier(value = BEAN_JSON_CACHE)
 	@Autowired
-	private Cache<StringKey, JsonNode> cache;
+	private Cache<StringKey, JsonNode> jsonCache;
 	@Autowired
 	private RasonSettings settings;
 
@@ -29,6 +32,6 @@ public class MetaController {
 	}
 	@GetMapping(value = URI_STATS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CacheStatsResponse stats() {
-		return new CacheStatsResponse(cache.size(), settings.getMaxCacheSize(), settings.getMaxCacheLifeMinutes());
+		return new CacheStatsResponse(jsonCache.size(), settings.getMaxCacheSize(), settings.getMaxCacheLifeMinutes());
 	}
 }

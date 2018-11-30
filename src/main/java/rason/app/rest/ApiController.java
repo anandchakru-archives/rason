@@ -1,9 +1,12 @@
 package rason.app.rest;
 
+import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
+import static rason.app.util.RasonConstant.BEAN_SLUGGER;
+import static rason.app.util.RasonConstant.NOT_FOUND;
 import static rason.app.util.RasonConstant.URI_API;
 import static rason.app.util.RasonConstant.URI_API_WITH_KEY;
-import static rason.app.util.RasonConstant.NOT_FOUND;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,8 +25,10 @@ import rason.app.service.SluggerService;
 @RestController
 public class ApiController {
 	@Autowired
-	private Cache<StringKey, JsonNode> cache;
+	@Qualifier(value = BEAN_JSON_CACHE)
+	private Cache<StringKey, JsonNode> jsonCache;
 	@Autowired
+	@Qualifier(value = BEAN_SLUGGER)
 	private SluggerService slugger;
 
 	@PostMapping(value = URI_API, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -33,19 +38,19 @@ public class ApiController {
 	@PostMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@PathVariable String key, @RequestBody JsonNode value) {
 		StringKey sKey = slugger.slug(key);
-		cache.put(sKey, value);
+		jsonCache.put(sKey, value);
 		return sKey;
 	}
 	@PutMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey update(@PathVariable String key, @RequestBody JsonNode value) {
 		StringKey sKey = new StringKey(key);
-		cache.put(sKey, value);
+		jsonCache.put(sKey, value);
 		return sKey;
 	}
 	@GetMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody JsonNode read(@PathVariable String key) {
 		StringKey sKey = new StringKey(key);
-		JsonNode jsonNode = cache.asMap().get(sKey);
+		JsonNode jsonNode = jsonCache.asMap().get(sKey);
 		if (jsonNode == null) {
 			throw new RasonException(NOT_FOUND);
 		}
@@ -54,7 +59,7 @@ public class ApiController {
 	@DeleteMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey delete(@PathVariable String key) {
 		StringKey sKey = new StringKey(key);
-		cache.invalidate(sKey);
+		jsonCache.invalidate(sKey);
 		return sKey;
 	}
 }

@@ -69,6 +69,10 @@ curl -is http://localhost:9090/stats
 - [x] CORS enabled
 - [x] Stats
 - [x] Live Demo @ https://rason.herokuapp.com/
+- [ ] Bulk upload
+- [ ] Frequently used JSON samples (eg: user, address, employee, department, student, books, teacher, blog, oauth token response)
+- [ ] Permanently live JSON (eg: persist in DB + cache)
+- [ ] Private JSON (requires authentication)
 - [ ] UI to validate, format, compress JSON
 - [ ] Support for simple logical expressions (eg: EQ, OR, AND)
 - [ ] SSL support

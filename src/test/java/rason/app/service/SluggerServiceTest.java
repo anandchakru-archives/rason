@@ -5,12 +5,14 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.when;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
+import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
 import java.io.IOException;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -33,7 +35,8 @@ public class SluggerServiceTest {
 	@Autowired
 	private RasonSettings settings;
 	@Autowired
-	private Cache<StringKey, JsonNode> cache;
+	@Qualifier(value = BEAN_JSON_CACHE)
+	private Cache<StringKey, JsonNode> jsonCache;
 	private final String SLUG = "3p14s5";
 
 	@BeforeClass
@@ -46,8 +49,8 @@ public class SluggerServiceTest {
 		when(slugger.slug(anyString())).thenCallRealMethod();
 		when(slugger.slug(isNull())).thenCallRealMethod();
 		ReflectionTestUtils.setField(slugger, "settings", settings);
-		ReflectionTestUtils.setField(slugger, "cache", cache);
-		cache.put(new StringKey(SLUG), new ObjectMapper().readTree("{}"));
+		ReflectionTestUtils.setField(slugger, BEAN_JSON_CACHE, jsonCache);
+		jsonCache.put(new StringKey(SLUG), new ObjectMapper().readTree("{}"));
 	}
 	@Test
 	public void testSlug() {
