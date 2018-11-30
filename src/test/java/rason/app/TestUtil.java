@@ -105,6 +105,31 @@ public class TestUtil {
 	public static <T> T mockPost(final MockMvc mockMvc, String uri, Class<T> rspType, Boolean assrt, String payload) {
 		return mockRequest(mockMvc, uri, rspType, assrt, payload);
 	}
+	/**
+	 * Convert JsonNode to respective Pojo
+	 * 
+	 * @param ip
+	 * @param valueType
+	 * @return
+	 */
+	public static <T> T to(JsonNode ip, Class<T> valueType) {
+		try {
+			return json.treeToValue(ip, valueType);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	/**
+	 * Make the actual GET/POST request. If payload is null GET, if not, POST.
+	 * 
+	 * @param mockMvc
+	 * @param uri
+	 * @param rspType
+	 * @param assrt
+	 * @param payload
+	 * @return
+	 */
 	private static <T> T mockRequest(final MockMvc mockMvc, String uri, Class<T> rspType, Boolean assrt,
 			String payload) {
 		String body;
