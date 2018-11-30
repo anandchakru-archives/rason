@@ -14,31 +14,47 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static rason.app.util.RasonConstant.NOT_FOUND;
 import static rason.app.util.RasonConstant.URI_API;
 import static rason.app.util.RasonConstant.URI_BASE;
+import static rason.app.util.RasonConstant.URI_BU_LIST;
+import static rason.app.util.RasonConstant.URI_BU_MAP;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
+import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
+import org.assertj.core.util.Lists;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Maps;
+import rason.app.model.BulkUploadRsp;
 import rason.app.model.StringKey;
 
 public class TestUtil {
-	private static ObjectMapper json = new ObjectMapper();
-	public static String JSON_1 = "{\"test\":\"simpleJsonForTest\"}";
-	public static String JSON_2 = "{\"test2\":\"UpdatedJsonForTest\"}";
-	public static String JSON_INVALID = "{\"test2\":\"UpdatedJsonForTest\"::}";
-	public static String SLUG_404 = "{\"fault\":\"" + NOT_FOUND + "\"}";
-
-	public static String create(final MockMvc mockMvc) throws UnsupportedEncodingException, Exception {
-		return create(mockMvc, JSON_1);
+	private static final ObjectMapper json = new ObjectMapper();
+	public static final String JSON_1 = "{\"test\":\"simpleJsonForTest\"}";
+	public static final String JSON_2 = "{\"test2\":\"UpdatedJsonForTest\"}";
+	public static final String JSON_INVALID = "{\"test2\":\"UpdatedJsonForTest\"::}";
+	public static final String SLUG_404 = "{\"fault\":\"" + NOT_FOUND + "\"}";
+	public static final Map<String, JsonNode> BUM = Maps.newHashMap();
+	public static final List<JsonNode> BUL = Lists.newArrayList();
+	static {
+		try {
+			BUM.put("one", json.readTree(JSON_1));
+			BUM.put("two", json.readTree(JSON_2));
+			BUL.add(json.readTree(JSON_1));
+			BUL.add(json.readTree(JSON_2));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
-	public static String create(final MockMvc mockMvc, String payload) throws UnsupportedEncodingException, Exception {
-		String key = mockMvc
-				.perform(post(URI_API).header(ACCEPT, APPLICATION_JSON).header(CONTENT_TYPE, APPLICATION_JSON)
-						.content(payload))
-				.andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-		assertTrue(StringUtils.isNotEmpty(key));
-		assertNotNull(json.readValue(key, StringKey.class));
-		return json.readValue(key, StringKey.class).getSlug();
+
+	public static StringKey create(final MockMvc mockMvc) {
+		return mockRequest(mockMvc, URI_API, StringKey.class, true, JSON_1);
+	}
+	public static StringKey create(final MockMvc mockMvc, String payload) {
+		return mockRequest(mockMvc, URI_API, StringKey.class, true, payload);
 	}
 	public static String update(final String key, String value, final MockMvc mockMvc)
 			throws UnsupportedEncodingException, Exception {
@@ -50,20 +66,11 @@ public class TestUtil {
 		assertNotNull(json.readValue(ukey, StringKey.class));
 		return json.readValue(ukey, StringKey.class).getSlug();
 	}
-	public static String read(final String key, final MockMvc mockMvc) throws UnsupportedEncodingException, Exception {
-		return read(key, mockMvc, true);
+	public static String read(final String key, final MockMvc mockMvc) {
+		return mockGet(mockMvc, URI_API + URI_BASE + key, JsonNode.class, true).toString();
 	}
-	public static String read(final String key, final MockMvc mockMvc, Boolean assrt)
-			throws UnsupportedEncodingException, Exception {
-		String value = mockMvc
-				.perform(get(URI_API + URI_BASE + key).header(ACCEPT, APPLICATION_JSON).header(CONTENT_TYPE,
-						APPLICATION_JSON))
-				.andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
-		if (assrt) {
-			assertTrue(StringUtils.isNotEmpty(value));
-			assertNotNull(json.readValue(value, JsonNode.class));
-		}
-		return value;
+	public static String read(final String key, final MockMvc mockMvc, Boolean assrt) {
+		return mockGet(mockMvc, URI_API + URI_BASE + key, JsonNode.class, assrt).toString();
 	}
 	public static String del(final String key, final MockMvc mockMvc) throws UnsupportedEncodingException, Exception {
 		String dKey = mockMvc
@@ -74,11 +81,38 @@ public class TestUtil {
 		assertNotNull(json.readValue(dKey, StringKey.class));
 		return json.readValue(dKey, StringKey.class).getSlug();
 	}
+	public static BulkUploadRsp bum(final MockMvc mockMvc) {
+		String payload = "{}";
+		try {
+			payload = json.writeValueAsString(BUM);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return mockRequest(mockMvc, URI_BU_MAP, BulkUploadRsp.class, true, payload);
+	}
+	public static BulkUploadRsp bul(final MockMvc mockMvc) {
+		String payload = "{}";
+		try {
+			payload = json.writeValueAsString(BUL);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		return mockRequest(mockMvc, URI_BU_LIST, BulkUploadRsp.class, true, payload);
+	}
 	public static <T> T mockGet(final MockMvc mockMvc, String uri, Class<T> rspType, Boolean assrt) {
+		return mockRequest(mockMvc, uri, rspType, assrt, null);
+	}
+	public static <T> T mockPost(final MockMvc mockMvc, String uri, Class<T> rspType, Boolean assrt, String payload) {
+		return mockRequest(mockMvc, uri, rspType, assrt, payload);
+	}
+	private static <T> T mockRequest(final MockMvc mockMvc, String uri, Class<T> rspType, Boolean assrt,
+			String payload) {
 		String body;
 		try {
-			body = mockMvc.perform(get(uri).header(ACCEPT, APPLICATION_JSON).header(CONTENT_TYPE, APPLICATION_JSON))
-					.andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+			MockHttpServletRequestBuilder rb = payload == null ? get(uri) : post(uri).content(payload);
+			rb.header(ACCEPT, APPLICATION_JSON).header(CONTENT_TYPE, APPLICATION_JSON);
+			body = mockMvc.perform(rb).andDo(print()).andExpect(status().isOk()).andReturn().getResponse()
+					.getContentAsString();
 			if (assrt) {
 				assertTrue(StringUtils.isNotEmpty(body));
 				assertNotNull(json.readValue(body, rspType));

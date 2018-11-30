@@ -22,7 +22,8 @@ public class SluggerService {
 
 	public StringKey slug(String key) {
 		StringKey sKey = (StringUtils.isEmpty(key) || StringUtils.isBlank(key)
-				|| StringUtils.equalsIgnoreCase(key, DEFAULT_KEY)) ? gen() : new StringKey(key);
+				|| StringUtils.equalsIgnoreCase(key, DEFAULT_KEY))
+				|| StringUtils.length(key) > settings.getSlugMaxLength() ? gen() : new StringKey(key);
 		int i = 0;
 		while (settings.getSlugGenMaxRetry() > i++ && jsonCache.asMap().get(sKey) != null) {
 			sKey = gen();

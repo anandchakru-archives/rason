@@ -1,5 +1,6 @@
 package rason.app.rest;
 
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
 import static rason.app.TestUtil.JSON_1;
@@ -20,7 +21,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import rason.app.config.RasonConfig;
 
 @SpringBootTest
@@ -36,16 +36,16 @@ public class ApiControllerTest {
 		System.setProperty(DEFAULT_PROFILES_PROPERTY_NAME, "junit");
 	}
 	@Test
-	public void testCreateJsonNode() throws Exception {
+	public void testCreateJsonNode() {
 		create(mockMvc);
 	}
-	@Test(expected = UnrecognizedPropertyException.class)
-	public void testCreateInvalidJsonNode() throws Exception {
-		create(mockMvc, JSON_INVALID);
+	@Test
+	public void testCreateInvalidJsonNode() {
+		assertNull(create(mockMvc, JSON_INVALID));
 	}
 	@Test
 	public void testUpdate() throws Exception {
-		String key = create(mockMvc);
+		String key = create(mockMvc).getSlug();
 		String uKey = update(key, JSON_2, mockMvc);
 		assertTrue(StringUtils.equals(key, uKey));
 		String uValue = read(uKey, mockMvc);
@@ -53,13 +53,13 @@ public class ApiControllerTest {
 	}
 	@Test
 	public void testRead() throws Exception {
-		String key = create(mockMvc);
+		String key = create(mockMvc).getSlug();
 		String value = read(key, mockMvc);
 		assertTrue(StringUtils.equals(value, JSON_1));
 	}
 	@Test
 	public void testDelete() throws Exception {
-		String key = create(mockMvc);
+		String key = create(mockMvc).getSlug();
 		String dKey = del(key, mockMvc);
 		assertTrue(StringUtils.equals(key, dKey));
 		String read = read(dKey, mockMvc, false);
