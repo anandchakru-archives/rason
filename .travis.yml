@@ -1,7 +1,15 @@
+# The following will halt after build (and NOT release) unless a git tag is created.
+# If you want to make a release (on any branch), do the following
+# git add . 
+# git commit -m "commit message"
+# git tag tag_name
+# git push && git push --tags
+
+
 # Value for $GITHUB_OAUTH_TOKEN is generated from https://github.com/settings/tokens
 # Value for $HEROKU_OAUTH_TOKEN is generated from https://dashboard.heroku.com/account
-
 # and added to travis https://travis-ci.org/anandchakru/rason/settings
+
 
 language: java
 script:
