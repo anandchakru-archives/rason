@@ -1,10 +1,14 @@
 package rason.app.rest;
 
 import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
+import static rason.app.util.RasonConstant.BEAN_JSON_OBJECMAPPER;
 import static rason.app.util.RasonConstant.BEAN_SLUGGER;
+import static rason.app.util.RasonConstant.DEFAULT_KEY;
 import static rason.app.util.RasonConstant.NOT_FOUND;
 import static rason.app.util.RasonConstant.URI_API;
 import static rason.app.util.RasonConstant.URI_API_WITH_KEY;
+import static rason.app.util.RasonConstant.URI_BASE;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -17,8 +21,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.cache.Cache;
 import rason.app.model.RasonException;
+import rason.app.model.StrResponse;
 import rason.app.model.StringKey;
 import rason.app.service.SluggerService;
 
@@ -30,6 +36,9 @@ public class ApiController {
 	@Autowired
 	@Qualifier(value = BEAN_SLUGGER)
 	private SluggerService slugger;
+	@Autowired
+	@Qualifier(BEAN_JSON_OBJECMAPPER)
+	public ObjectMapper objectMapper;
 
 	@PostMapping(value = URI_API, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@RequestBody JsonNode value) {
@@ -46,6 +55,14 @@ public class ApiController {
 		StringKey sKey = new StringKey(key);
 		jsonCache.put(sKey, value);
 		return sKey;
+	}
+	@GetMapping(value = URI_API + URI_BASE + DEFAULT_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody StringKey makeRandom() {
+		StringKey key = slugger.slug(null);
+		StrResponse rsp = new StrResponse();
+		rsp.setPayload(UUID.randomUUID().toString().replace("-", ""));
+		jsonCache.put(key, objectMapper.valueToTree(rsp));
+		return key;
 	}
 	@GetMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody JsonNode read(@PathVariable String key) {

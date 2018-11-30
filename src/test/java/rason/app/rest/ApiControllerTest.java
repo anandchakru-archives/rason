@@ -1,5 +1,6 @@
 package rason.app.rest;
 
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
@@ -9,8 +10,12 @@ import static rason.app.TestUtil.JSON_INVALID;
 import static rason.app.TestUtil.SLUG_404;
 import static rason.app.TestUtil.create;
 import static rason.app.TestUtil.del;
+import static rason.app.TestUtil.mockGet;
 import static rason.app.TestUtil.read;
 import static rason.app.TestUtil.update;
+import static rason.app.util.RasonConstant.DEFAULT_KEY;
+import static rason.app.util.RasonConstant.URI_API;
+import static rason.app.util.RasonConstant.URI_BASE;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -22,6 +27,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import rason.app.config.RasonConfig;
+import rason.app.model.StringKey;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,6 +48,14 @@ public class ApiControllerTest {
 	@Test
 	public void testCreateInvalidJsonNode() {
 		assertNull(create(mockMvc, JSON_INVALID));
+	}
+	@Test
+	public void testMakeRandom() {
+		StringKey key = mockGet(mockMvc, URI_API + URI_BASE + DEFAULT_KEY, StringKey.class, true);
+		assertNotNull(key);
+		assertNotNull(key.getSlug());
+		String value = read(key.getSlug(), mockMvc);
+		assertNotNull(value);
 	}
 	@Test
 	public void testUpdate() throws Exception {

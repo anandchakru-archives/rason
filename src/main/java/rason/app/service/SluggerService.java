@@ -2,6 +2,7 @@ package rason.app.service;
 
 import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
 import static rason.app.util.RasonConstant.BEAN_SLUGGER;
+import static rason.app.util.RasonConstant.DEFAULT_KEY;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ public class SluggerService {
 	private Cache<StringKey, JsonNode> jsonCache;
 	@Autowired
 	private RasonSettings settings;
-	private final String DEFAULT_KEY = "rnd";
 
 	public StringKey slug(String key) {
 		StringKey sKey = (StringUtils.isEmpty(key) || StringUtils.isBlank(key)

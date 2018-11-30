@@ -47,10 +47,4 @@ public class RasonControllerAdviceTest {
 		StringKey create = create(mockMvc, JSON_INVALID);
 		assertNull(create);
 	}
-	@Test
-	public void testHandleServletException() {
-		FaultResponse rsp = to(mockGet(mockMvc, URI_API + URI_BASE, JsonNode.class, true), FaultResponse.class);
-		assertNotNull(rsp);
-		assertNotNull(rsp.getFault());
-	}
 }

@@ -97,6 +97,7 @@ curl -is http://localhost:9090/stats
 - [x] Stats
 - [x] Live Demo @ https://rason.herokuapp.com/
 - [x] Bulk upload
+- [x] Random JSON
 - [ ] Frequently used JSON samples
   * [ ] Oauth token response
   * [ ] Employee-Department

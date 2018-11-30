@@ -11,6 +11,7 @@ public class RasonConstant {
 	public static final String URI_HB = "/hb";
 	public static final String URI_STATS = "/stats";
 	//
+	public static final String DEFAULT_KEY = "rnd";
 	public static final String HB_PREFIX = "beat_";
 	public static final String NOT_FOUND = "notfound";
 	public static final String BEAN_JSON_CACHE = "jsonCache";

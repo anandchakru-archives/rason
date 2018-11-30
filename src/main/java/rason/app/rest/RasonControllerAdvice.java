@@ -1,6 +1,5 @@
 package rason.app.rest;
 
-import javax.servlet.ServletException;
 import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -31,23 +30,5 @@ public class RasonControllerAdvice {
 	@ExceptionHandler(HttpMessageConversionException.class)
 	public @ResponseBody FaultResponse handleHttpMessageConversionException(HttpMessageConversionException hmce) {
 		return new FaultResponse(hmce.getMessage());
-	}
-	/**
-	 * 
-	 * HttpMediaTypeException
-	 * HttpSessionRequiredException
-	 * ModelAndViewDefiningException
-	 * MissingServletRequestPartException
-	 * HttpRequestMethodNotSupportedException
-	 * NestedServletException
-	 * NoHandlerFoundException
-	 * UnavailableException
-	 * 
-	 * @param se
-	 * @return
-	 */
-	@ExceptionHandler(ServletException.class)
-	public @ResponseBody FaultResponse handleServletException(ServletException se) {
-		return new FaultResponse(se.getMessage());
 	}
 }
