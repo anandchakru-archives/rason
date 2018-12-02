@@ -104,10 +104,19 @@ curl -is http://localhost:9090/stats
   * [ ] User-Address
   * [ ] Student-Teacher
   * [ ] Blog post
-- [ ] Permanently live JSON (persist in DB + cache)
+- [ ] Permanently live JSON (mysql/firebase + cache)
 - [ ] Private JSON (use oauth/authslug/jwt?)
 - [ ] UI to validate, format, compress JSON
 - [ ] Support for simple logical expressions (eg: EQ, OR, AND)
 - [ ] SSL support
 - [ ] dynamic expiry
 - [ ] Payload version
+
+## UI
+
+```sh
+cd rason/src/main
+ng new ng
+npm i jquery @types/jquery popper.js @types/popper.js bootstrap bootstrap-scss cookieconsent ngx-cookieconsent ng2-ace-editor
+
+```

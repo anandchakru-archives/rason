@@ -30,3 +30,8 @@ bin/
 # System Files
 .DS_Store
 Thumbs.db
+
+
+#
+src/ng/src/environments/version.ts
+src/main/ng/src/environments/version\.ts
