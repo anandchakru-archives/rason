@@ -1,0 +1,50 @@
+
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/_variables.scss';
+
+.rep-obj {
+    display: flex;
+    white-space: normal;
+    word-wrap: break-word;
+    margin-left: 12px;
+    font-family: Courier New, Courier, monospace;
+    font-size: 12px;
+  }
+  .pointer{
+    cursor: pointer;
+    &:hover{
+      background:$gray-400;
+    }
+  }
+
+  .toggler {
+    width: 10px;
+    transition: transform 0.1s ease-in;
+  }
+  .toggler::after {
+    content: "+";
+  }
+  .toggler.opened::after {
+    content: "-";
+  }
+  
+  .item-key {
+    color: #881391
+  }
+  
+  .item-title {
+    color: black;
+  }
+  
+  .item-title.obj-number,
+  .item-title.obj-boolean {
+    color: #1c00cf;
+  }
+  
+  .dot {
+    color: dimgray;
+  }
+  
+  .sub-child {
+    margin-left: 10px;
+  }

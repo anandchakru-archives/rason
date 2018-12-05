@@ -28,10 +28,12 @@
             ],
             "styles": [
               "node_modules/cookieconsent/build/cookieconsent.min.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.css",
               "src/styles.scss"
             ],
             "scripts": [
-              "node_modules/cookieconsent/build/cookieconsent.min.js"
+              "node_modules/cookieconsent/build/cookieconsent.min.js",
+              "node_modules/@fortawesome/fontawesome-free/js/all.js"
             ]
           },
           "configurations": {

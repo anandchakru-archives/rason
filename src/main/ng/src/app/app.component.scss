@@ -1,7 +1,8 @@
-.dragger{
-    cursor: ew-resize;
-}
+@import "~src/assets/custom.scss";
 
-.scrollable{
-    overflow: scroll;
+#tainput{
+    margin-top: 0;
+    font-family: $font-family-monospace;
+    font-size: 12px;
+    min-height: 200px;
 }

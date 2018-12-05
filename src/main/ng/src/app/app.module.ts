@@ -1,10 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { NgcCookieConsentModule, NgcCookieConsentConfig } from 'ngx-cookieconsent';
 
 import { AppComponent } from './app.component';
 import { CookieComponent } from './cookie/cookie.component';
+import { JsonViewComponent } from './json-view/json-view.component';
 
 
 const cookieconfig: NgcCookieConsentConfig= {
@@ -31,10 +33,12 @@ const cookieconfig: NgcCookieConsentConfig= {
 @NgModule({
   declarations: [
     AppComponent,
-    CookieComponent
+    CookieComponent,
+    JsonViewComponent
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     NgcCookieConsentModule.forRoot(cookieconfig)
   ],
   providers: [
