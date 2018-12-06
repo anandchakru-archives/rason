@@ -48,11 +48,6 @@ public class ApiController {
 	}
 	@PostMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@PathVariable String key, @RequestBody JsonNode value) {
-		try {
-			Thread.sleep(1500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		StringKey sKey = slugger.slug(key);
 		jsonCache.put(sKey, value);
 		return sKey;

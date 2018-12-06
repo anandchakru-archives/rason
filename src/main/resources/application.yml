@@ -14,4 +14,4 @@ rason:
   slugMaxLength: 50
   slugGenMaxRetry: 10
   maxCacheSize: 2000
-  maxCacheLifeMinutes: 1440
+  maxCacheLifeMinutes: 14400

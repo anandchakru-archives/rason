@@ -9,6 +9,7 @@ import { AlertType } from './model/alert';
 import { LoadiComponent } from './load/loadi/loadi.component';
 import { Loadi } from './model/loadi';
 import { JsonViewComponent } from './json-view/json-view.component';
+import { VERSION } from 'src/environments/version';
 
 @Component({
   selector: 'app-root',
@@ -27,6 +28,7 @@ export class AppComponent implements OnInit {
   copied: boolean = false;
   hideUrl:boolean=true;
   slugs: Key[];
+  version = VERSION;
   @ViewChild('btnBeautifyJson') btnBeautifyJson: ElementRef;
   @ViewChild('btnUglyJson') btnUglyJson: ElementRef;
   @ViewChild('btnSaveJson') btnSaveJson: ElementRef;
