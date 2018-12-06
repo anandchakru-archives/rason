@@ -62,6 +62,9 @@ export class AppComponent implements OnInit {
       setTimeout(() => {
         this.renderer2.removeClass(this.btnBeautifyJson.nativeElement, 'btn-success');
         this.renderer2.addClass(this.btnBeautifyJson.nativeElement, 'btn-primary');
+        if(this.copied){
+          this.growliService.addAlert("Copied to clipboard.", AlertType.SUCCESS);
+        }
       }, 1000);
       this.hideLoadi(loadi);
     }
@@ -78,6 +81,9 @@ export class AppComponent implements OnInit {
       setTimeout(() => {
         this.renderer2.removeClass(this.btnUglyJson.nativeElement, 'btn-success');
         this.renderer2.addClass(this.btnUglyJson.nativeElement, 'btn-primary');
+        if(this.copied){
+          this.growliService.addAlert("Copied to clipboard.", AlertType.SUCCESS);
+        }
       }, 1000);
       this.hideLoadi(loadi);
     }
