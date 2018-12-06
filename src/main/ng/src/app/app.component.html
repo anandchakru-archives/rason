@@ -14,7 +14,7 @@
                 </button>
             </div>
             <div class="btn-group" role="group" aria-label="Rason Cache Options">
-                <button #btnSaveJson type="button" class="btn btn-info" [ngClass]="disableBtnClass" title="Save to Rason Cache" (click)="createJson(tainput.value)"><i class="fas fa-upload"></i></button>
+                <button #btnSaveJson type="button" class="btn btn-info" [ngClass]="disableBtnClass" title="Save to Rason Cache" (click)="createJson(tainput.value, $event)"><i class="fas fa-upload"></i></button>
                 <button #btnUrl type="button" class="btn btn-info" title="Load from url" (click)="toggleHideUrl()"><i class="fas fa-location-arrow"></i></button>
             </div>
         </div>
@@ -65,4 +65,28 @@
 <app-loadi #loadiComponent></app-loadi>
 <div id="versionInfo" class="sr-only text-hide">
     {{version | json}}
+</div>
+
+<div class="modal fade" id="slugIpModal" [ngClass]="slugInputModalClass" [ngStyle]="slugInputModalStyle">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Custom Slug</h4>
+          <button type="button" class="close" (click)="hideSlugInputModal()">&times;</button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+            <input type="text" class="form-control ip" [ngClass]="slugInputClass" #slugInput (keyup)="checkSlug(slugInput.value)" placeholder="slug">
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="saveJson(slugInput.value)">Save</button>
+        </div>
+  
+      </div>
+    </div>
 </div>

@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import { NgcCookieConsentService, NgcNoCookieLawEvent, NgcStatusChangeEvent, NgcInitializeEvent } from 'ngx-cookieconsent';
-import { Subscription, timer } from 'rxjs';
+import { Subscription, timer, Subject } from 'rxjs';
 import { ClipService } from './service/clip.service';
 import { RestService } from './service/rest.service';
 import { Key } from './model/key';
@@ -10,6 +10,8 @@ import { LoadiComponent } from './load/loadi/loadi.component';
 import { Loadi } from './model/loadi';
 import { JsonViewComponent } from './json-view/json-view.component';
 import { VERSION } from 'src/environments/version';
+import * as $ from 'jquery';
+import { CheckSlugRsp } from './model/checkSlug.rsp';
 
 @Component({
   selector: 'app-root',
@@ -28,8 +30,12 @@ export class AppComponent implements OnInit {
   expanded: boolean;
   copied: boolean = false;
   hideUrl:boolean=true;
+  slugInputModalClass:string='';
+  slugInputClass:string='';
+  slugInputModalStyle:any={"display": "none"};
   slugs: Key[];
   version = VERSION;
+  slugSub:Subject<Key>  = new Subject();
   @ViewChild('btnBeautifyJson') btnBeautifyJson: ElementRef;
   @ViewChild('btnUglyJson') btnUglyJson: ElementRef;
   @ViewChild('btnSaveJson') btnSaveJson: ElementRef;
@@ -141,8 +147,36 @@ export class AppComponent implements OnInit {
       this.hideLoadi(loadi);
     }
   }
-  createJson(json: string){
+  checkSlug(slug:string){
+    if(slug && slug.length>4){
+      this.rest.checkSlug(slug).subscribe((rsp:CheckSlugRsp)=>{
+        if(rsp.exists){
+          this.slugInputClass='border-danger';
+        }else{
+          this.slugInputClass='border-success';
+        }
+      });
+    }
+  }
+  saveJson(slug:string){
+    this.slugInputClass='';
+    const key:Key = new Key();
+    key.slug = slug;
+    this.slugSub.next(key);
+  }
+  createJson(json: string, event, slug?:string){
+    if(event && event.shiftKey){
+      this.slugSub.subscribe((key:Key)=>{
+        this.createJson(json, undefined, key.slug);
+      });
+      this.slugInputModalClass='show';
+      this.slugInputModalStyle={"display": "block"};
+      return;
+    }
     if(!json || json.length<8){
+      this.growliService.addAlert("Expecting a minimum of 8 characters long for JSON.", AlertType.WARNING);
+      this.resetBtnSaveJson();
+      this.hideSlugInputModal();
       return;
     }
     this.renderer2.addClass(this.btnSaveJson.nativeElement, 'btn-warning');
@@ -151,11 +185,16 @@ export class AppComponent implements OnInit {
       this.resetBtnSaveJson();
     }, 2000);
     this.update(json);
-    this.rest.create(json).subscribe((key:Key)=>{
+    this.rest.create(json, slug).subscribe((key:Key)=>{
       this.growliService.addAlert("Saved @" + key.slug, AlertType.SUCCESS);
       this.slugs.push(key);
       this.resetBtnSaveJson();
+      this.hideSlugInputModal();
     });
+  }
+  hideSlugInputModal(){
+    this.slugInputModalClass='';
+    this.slugInputModalStyle={"display": "none"};
   }
   resetBtnSaveJson(){
     this.renderer2.removeClass(this.btnSaveJson.nativeElement, 'btn-warning');

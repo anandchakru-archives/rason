@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-sm bg-dark navbar-light sticky-top\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"btn-toolbar\" role=\"toolbar\" aria-label=\"Options\">\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Json Options\">\r\n                <button #btnBeautifyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Beautify\" (click)=\"beautifyJson(tainput.value)\"><i class=\"fas fa-indent\"></i></button>\r\n                <button #btnUglyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Uglify\" (click)=\"uglifyJson(tainput.value)\"><i class=\"fas fa-file-archive\"></i></button>\r\n                <button #btnExpandCollapse type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Expand/Collapse\" (click)=\"expCollapse()\">\r\n                    <span *ngIf=\"!expanded\">\r\n                        <i class=\"fas fa-plus-square\"></i>\r\n                    </span>\r\n                    <span *ngIf=\"expanded\" >\r\n                        <i class=\"fas fa-minus-square\"></i>\r\n                    </span>\r\n                </button>\r\n            </div>\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Rason Cache Options\">\r\n                <button #btnSaveJson type=\"button\" class=\"btn btn-info\" [ngClass]=\"disableBtnClass\" title=\"Save to Rason Cache\" (click)=\"createJson(tainput.value)\"><i class=\"fas fa-upload\"></i></button>\r\n                <button #btnUrl type=\"button\" class=\"btn btn-info\" title=\"Load from url\" (click)=\"toggleHideUrl()\"><i class=\"fas fa-location-arrow\"></i></button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</nav>\r\n\r\n\r\n<div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n        <div class=\"col-11\">\r\n            <div class=\"row\" [hidden]=\"hideUrl\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group\">\r\n                        <input type=\"text\" class=\"form-control ip\" [ngClass]=\"urlClass\" #urlInput [ngModel]=\"urlInputVal\" (keyup)=\"updateUrl(urlInput.value)\" placeholder=\"https://api.github.com/repos/anandchakru/rason\">\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group hundred\">\r\n                        <textarea id=\"tainput\" class=\"form-control ip\" [ngClass]=\"txtClass\" #tainput [ngModel]=\"taInputVal\" (keyup)=\"update(tainput.value)\" placeholder='{\"id\":\"1\",\"name\":\"rason\"}'></textarea>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <app-json-view #appJsonView [json]=\"inputJson\" [expanded]=\"expanded\" *ngIf=\"!err?.length\"></app-json-view>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-1 bg-secondary d-none d-md-block d-lg-block d-xl-block\">\r\n            <input type=\"text\" class=\"form-control ip\" #searchNotifications [ngModel]=\"searchNotificationsVal\" (keyup)=\"search(searchNotifications.value)\" placeholder=\"search\">\r\n            <div class=\"list-group\">\r\n                <a href=\"#\" (click)=\"loadUrl('api/'+key.slug)\" class=\"list-group-item list-group-item-action\" *ngFor=\"let key of slugs\">{{key.slug}}</a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<nav class=\"navbar navbar-expand-sm bg-dark navbar-light fixed-bottom\">\r\n    <div class=\"container-fluid\">\r\n        <span class=\"text-white\">simple scalable service virtualization (json).</span>\r\n    </div>\r\n</nav>\r\n\r\n<app-cookie></app-cookie>\r\n<app-growli></app-growli>\r\n<app-loadi #loadiComponent></app-loadi>\r\n<div id=\"versionInfo\" class=\"sr-only text-hide\">\r\n    {{version | json}}\r\n</div>"
+module.exports = "<nav class=\"navbar navbar-expand-sm bg-dark navbar-light sticky-top\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"btn-toolbar\" role=\"toolbar\" aria-label=\"Options\">\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Json Options\">\r\n                <button #btnBeautifyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Beautify\" (click)=\"beautifyJson(tainput.value)\"><i class=\"fas fa-indent\"></i></button>\r\n                <button #btnUglyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Uglify\" (click)=\"uglifyJson(tainput.value)\"><i class=\"fas fa-file-archive\"></i></button>\r\n                <button #btnExpandCollapse type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Expand/Collapse\" (click)=\"expCollapse()\">\r\n                    <span *ngIf=\"!expanded\">\r\n                        <i class=\"fas fa-plus-square\"></i>\r\n                    </span>\r\n                    <span *ngIf=\"expanded\" >\r\n                        <i class=\"fas fa-minus-square\"></i>\r\n                    </span>\r\n                </button>\r\n            </div>\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Rason Cache Options\">\r\n                <button #btnSaveJson type=\"button\" class=\"btn btn-info\" [ngClass]=\"disableBtnClass\" title=\"Save to Rason Cache\" (click)=\"createJson(tainput.value, $event)\"><i class=\"fas fa-upload\"></i></button>\r\n                <button #btnUrl type=\"button\" class=\"btn btn-info\" title=\"Load from url\" (click)=\"toggleHideUrl()\"><i class=\"fas fa-location-arrow\"></i></button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</nav>\r\n\r\n\r\n<div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n        <div class=\"col-11\">\r\n            <div class=\"row\" [hidden]=\"hideUrl\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group\">\r\n                        <input type=\"text\" class=\"form-control ip\" [ngClass]=\"urlClass\" #urlInput [ngModel]=\"urlInputVal\" (keyup)=\"updateUrl(urlInput.value)\" placeholder=\"https://api.github.com/repos/anandchakru/rason\">\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group hundred\">\r\n                        <textarea id=\"tainput\" class=\"form-control ip\" [ngClass]=\"txtClass\" #tainput [ngModel]=\"taInputVal\" (keyup)=\"update(tainput.value)\" placeholder='{\"id\":\"1\",\"name\":\"rason\"}'></textarea>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <app-json-view #appJsonView [json]=\"inputJson\" [expanded]=\"expanded\" *ngIf=\"!err?.length\"></app-json-view>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-1 bg-secondary d-none d-md-block d-lg-block d-xl-block\">\r\n            <input type=\"text\" class=\"form-control ip\" #searchNotifications [ngModel]=\"searchNotificationsVal\" (keyup)=\"search(searchNotifications.value)\" placeholder=\"search\">\r\n            <div class=\"list-group\">\r\n                <a href=\"#\" (click)=\"loadUrl('api/'+key.slug)\" class=\"list-group-item list-group-item-action\" *ngFor=\"let key of slugs\">{{key.slug}}</a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<nav class=\"navbar navbar-expand-sm bg-dark navbar-light fixed-bottom\">\r\n    <div class=\"container-fluid\">\r\n        <span class=\"text-white\">simple scalable service virtualization (json).</span>\r\n    </div>\r\n</nav>\r\n\r\n<app-cookie></app-cookie>\r\n<app-growli></app-growli>\r\n<app-loadi #loadiComponent></app-loadi>\r\n<div id=\"versionInfo\" class=\"sr-only text-hide\">\r\n    {{version | json}}\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"slugIpModal\" [ngClass]=\"slugInputModalClass\" [ngStyle]=\"slugInputModalStyle\">\r\n    <div class=\"modal-dialog modal-sm modal-dialog-centered\">\r\n      <div class=\"modal-content\">\r\n  \r\n        <!-- Modal Header -->\r\n        <div class=\"modal-header\">\r\n          <h4 class=\"modal-title\">Custom Slug</h4>\r\n          <button type=\"button\" class=\"close\" (click)=\"hideSlugInputModal()\">&times;</button>\r\n        </div>\r\n  \r\n        <!-- Modal body -->\r\n        <div class=\"modal-body\">\r\n            <input type=\"text\" class=\"form-control ip\" [ngClass]=\"slugInputClass\" #slugInput (keyup)=\"checkSlug(slugInput.value)\" placeholder=\"slug\">\r\n        </div>\r\n  \r\n        <!-- Modal footer -->\r\n        <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-danger\" (click)=\"saveJson(slugInput.value)\">Save</button>\r\n        </div>\r\n  \r\n      </div>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -60,12 +60,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
 /* harmony import */ var _service_clip_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./service/clip.service */ "./src/app/service/clip.service.ts");
 /* harmony import */ var _service_rest_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./service/rest.service */ "./src/app/service/rest.service.ts");
-/* harmony import */ var _growl_growli_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./growl/growli.service */ "./src/app/growl/growli.service.ts");
-/* harmony import */ var _model_alert__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./model/alert */ "./src/app/model/alert.ts");
-/* harmony import */ var _load_loadi_loadi_component__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./load/loadi/loadi.component */ "./src/app/load/loadi/loadi.component.ts");
-/* harmony import */ var _model_loadi__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./model/loadi */ "./src/app/model/loadi.ts");
-/* harmony import */ var _json_view_json_view_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./json-view/json-view.component */ "./src/app/json-view/json-view.component.ts");
-/* harmony import */ var src_environments_version__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! src/environments/version */ "./src/environments/version.ts");
+/* harmony import */ var _model_key__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./model/key */ "./src/app/model/key.ts");
+/* harmony import */ var _growl_growli_service__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./growl/growli.service */ "./src/app/growl/growli.service.ts");
+/* harmony import */ var _model_alert__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./model/alert */ "./src/app/model/alert.ts");
+/* harmony import */ var _load_loadi_loadi_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./load/loadi/loadi.component */ "./src/app/load/loadi/loadi.component.ts");
+/* harmony import */ var _model_loadi__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./model/loadi */ "./src/app/model/loadi.ts");
+/* harmony import */ var _json_view_json_view_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./json-view/json-view.component */ "./src/app/json-view/json-view.component.ts");
+/* harmony import */ var src_environments_version__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! src/environments/version */ "./src/environments/version.ts");
+
 
 
 
@@ -86,7 +88,11 @@ var AppComponent = /** @class */ (function () {
         this.taInputVal = '{}';
         this.copied = false;
         this.hideUrl = true;
-        this.version = src_environments_version__WEBPACK_IMPORTED_MODULE_10__["VERSION"];
+        this.slugInputModalClass = '';
+        this.slugInputClass = '';
+        this.slugInputModalStyle = { "display": "none" };
+        this.version = src_environments_version__WEBPACK_IMPORTED_MODULE_11__["VERSION"];
+        this.slugSub = new rxjs__WEBPACK_IMPORTED_MODULE_2__["Subject"]();
     }
     AppComponent.prototype.ngOnInit = function () {
         var _this = this;
@@ -109,6 +115,9 @@ var AppComponent = /** @class */ (function () {
             setTimeout(function () {
                 _this.renderer2.removeClass(_this.btnBeautifyJson.nativeElement, 'btn-success');
                 _this.renderer2.addClass(_this.btnBeautifyJson.nativeElement, 'btn-primary');
+                if (_this.copied) {
+                    _this.growliService.addAlert("Copied to clipboard.", _model_alert__WEBPACK_IMPORTED_MODULE_7__["AlertType"].SUCCESS);
+                }
             }, 1000);
             this.hideLoadi(loadi);
         }
@@ -126,6 +135,9 @@ var AppComponent = /** @class */ (function () {
             setTimeout(function () {
                 _this.renderer2.removeClass(_this.btnUglyJson.nativeElement, 'btn-success');
                 _this.renderer2.addClass(_this.btnUglyJson.nativeElement, 'btn-primary');
+                if (_this.copied) {
+                    _this.growliService.addAlert("Copied to clipboard.", _model_alert__WEBPACK_IMPORTED_MODULE_7__["AlertType"].SUCCESS);
+                }
             }, 1000);
             this.hideLoadi(loadi);
         }
@@ -187,9 +199,39 @@ var AppComponent = /** @class */ (function () {
             this.hideLoadi(loadi);
         }
     };
-    AppComponent.prototype.createJson = function (json) {
+    AppComponent.prototype.checkSlug = function (slug) {
         var _this = this;
+        if (slug && slug.length > 4) {
+            this.rest.checkSlug(slug).subscribe(function (rsp) {
+                if (rsp.exists) {
+                    _this.slugInputClass = 'border-danger';
+                }
+                else {
+                    _this.slugInputClass = 'border-success';
+                }
+            });
+        }
+    };
+    AppComponent.prototype.saveJson = function (slug) {
+        this.slugInputClass = '';
+        var key = new _model_key__WEBPACK_IMPORTED_MODULE_5__["Key"]();
+        key.slug = slug;
+        this.slugSub.next(key);
+    };
+    AppComponent.prototype.createJson = function (json, event, slug) {
+        var _this = this;
+        if (event && event.shiftKey) {
+            this.slugSub.subscribe(function (key) {
+                _this.createJson(json, undefined, key.slug);
+            });
+            this.slugInputModalClass = 'show';
+            this.slugInputModalStyle = { "display": "block" };
+            return;
+        }
         if (!json || json.length < 8) {
+            this.growliService.addAlert("Expecting a minimum of 8 characters long for JSON.", _model_alert__WEBPACK_IMPORTED_MODULE_7__["AlertType"].WARNING);
+            this.resetBtnSaveJson();
+            this.hideSlugInputModal();
             return;
         }
         this.renderer2.addClass(this.btnSaveJson.nativeElement, 'btn-warning');
@@ -198,11 +240,16 @@ var AppComponent = /** @class */ (function () {
             _this.resetBtnSaveJson();
         }, 2000);
         this.update(json);
-        this.rest.create(json).subscribe(function (key) {
-            _this.growliService.addAlert("Saved @" + key.slug, _model_alert__WEBPACK_IMPORTED_MODULE_6__["AlertType"].SUCCESS);
+        this.rest.create(json, slug).subscribe(function (key) {
+            _this.growliService.addAlert("Saved @" + key.slug, _model_alert__WEBPACK_IMPORTED_MODULE_7__["AlertType"].SUCCESS);
             _this.slugs.push(key);
             _this.resetBtnSaveJson();
+            _this.hideSlugInputModal();
         });
+    };
+    AppComponent.prototype.hideSlugInputModal = function () {
+        this.slugInputModalClass = '';
+        this.slugInputModalStyle = { "display": "none" };
     };
     AppComponent.prototype.resetBtnSaveJson = function () {
         this.renderer2.removeClass(this.btnSaveJson.nativeElement, 'btn-warning');
@@ -223,14 +270,14 @@ var AppComponent = /** @class */ (function () {
             timeout = 10000;
         if (!timeoutMsg || !timeoutMsg.length)
             timeoutMsg = "tired of waiting, giving up on " + msg;
-        var loadi = new _model_loadi__WEBPACK_IMPORTED_MODULE_8__["Loadi"]();
+        var loadi = new _model_loadi__WEBPACK_IMPORTED_MODULE_9__["Loadi"]();
         loadi.msg = msg;
         loadi.timeout = timeout;
         loadi.timeoutMsg = timeoutMsg;
         loadi.id = this.loadiComponent.loadis.push(loadi) - 1;
         Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["timer"])(timeout).subscribe(function () {
             if (_this.hideLoadi(loadi) >= 0) {
-                _this.growliService.addAlert(loadi.timeoutMsg, _model_alert__WEBPACK_IMPORTED_MODULE_6__["AlertType"].DANGER);
+                _this.growliService.addAlert(loadi.timeoutMsg, _model_alert__WEBPACK_IMPORTED_MODULE_7__["AlertType"].DANGER);
             }
         });
         return loadi;
@@ -270,11 +317,11 @@ var AppComponent = /** @class */ (function () {
     ], AppComponent.prototype, "btnNofication", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('loadiComponent'),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _load_loadi_loadi_component__WEBPACK_IMPORTED_MODULE_7__["LoadiComponent"])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _load_loadi_loadi_component__WEBPACK_IMPORTED_MODULE_8__["LoadiComponent"])
     ], AppComponent.prototype, "loadiComponent", void 0);
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('appJsonView'),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _json_view_json_view_component__WEBPACK_IMPORTED_MODULE_9__["JsonViewComponent"])
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:type", _json_view_json_view_component__WEBPACK_IMPORTED_MODULE_10__["JsonViewComponent"])
     ], AppComponent.prototype, "appJsonView", void 0);
     AppComponent = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -285,7 +332,7 @@ var AppComponent = /** @class */ (function () {
         tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_service_clip_service__WEBPACK_IMPORTED_MODULE_3__["ClipService"],
             _angular_core__WEBPACK_IMPORTED_MODULE_1__["Renderer2"],
             _service_rest_service__WEBPACK_IMPORTED_MODULE_4__["RestService"],
-            _growl_growli_service__WEBPACK_IMPORTED_MODULE_5__["GrowliService"]])
+            _growl_growli_service__WEBPACK_IMPORTED_MODULE_6__["GrowliService"]])
     ], AppComponent);
     return AppComponent;
 }());
@@ -843,7 +890,7 @@ var LoadModule = /** @class */ (function () {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<div id=\"loader-wrapper\">\r\n    <div id=\"loader\"></div>\r\n</div>\r\n<div class=\"content\">{{loadi.msg}}</div>"
+module.exports = "<div class=\"loaderContent\" *ngFor=\"let loadi of loadis\">\r\n    <div id=\"loader-wrapper\">\r\n        <div id=\"loader\"></div>\r\n    </div>\r\n    <div class=\"content\">{{loadi.msg}}</div>\r\n</div>"
 
 /***/ }),
 
@@ -916,6 +963,26 @@ var AlertType;
     AlertType[AlertType["WARNING"] = 2] = "WARNING";
     AlertType[AlertType["DANGER"] = 3] = "DANGER";
 })(AlertType || (AlertType = {}));
+
+
+/***/ }),
+
+/***/ "./src/app/model/key.ts":
+/*!******************************!*\
+  !*** ./src/app/model/key.ts ***!
+  \******************************/
+/*! exports provided: Key */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Key", function() { return Key; });
+var Key = /** @class */ (function () {
+    function Key() {
+    }
+    return Key;
+}());
+
 
 
 /***/ }),
@@ -1062,8 +1129,11 @@ var RestService = /** @class */ (function () {
     RestService.prototype.cacheCount = function () {
         return this.http.get('api/keys', this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('cacheCount')));
     };
-    RestService.prototype.create = function (json) {
-        return this.http.post('api/', json, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('create', json)));
+    RestService.prototype.checkSlug = function (slug) {
+        return this.http.get('cs/' + slug, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('checkSlug', slug)));
+    };
+    RestService.prototype.create = function (json, slug) {
+        return this.http.post('api/' + (slug && slug.length > 0 ? slug : ''), json, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('create', json)));
     };
     RestService.prototype.fetchJson = function (url) {
         return this.http.get(url, this.httpOptions).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])(this.handleError('fetchJson', url)));
@@ -1126,12 +1196,12 @@ __webpack_require__.r(__webpack_exports__);
 /* tslint:disable */
 var VERSION = {
     "dirty": true,
-    "raw": "2493485-dirty",
-    "hash": "2493485",
+    "raw": "3b8ab5b-dirty",
+    "hash": "3b8ab5b",
     "distance": null,
     "tag": null,
     "semver": null,
-    "suffix": "2493485-dirty",
+    "suffix": "3b8ab5b-dirty",
     "semverString": null,
     "version": "1.0.11"
 };

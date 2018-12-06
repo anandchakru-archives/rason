@@ -9,6 +9,7 @@ import static rason.app.util.RasonConstant.URI_API;
 import static rason.app.util.RasonConstant.URI_API_KEYS;
 import static rason.app.util.RasonConstant.URI_API_WITH_KEY;
 import static rason.app.util.RasonConstant.URI_BASE;
+import static rason.app.util.RasonConstant.URI_CHECK_SLUG;
 import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
+import rason.app.model.CheckSlugRsp;
 import rason.app.model.JsonVal;
 import rason.app.model.RasonException;
 import rason.app.model.StrResponse;
@@ -43,6 +45,10 @@ public class ApiController {
 	@Qualifier(BEAN_JSON_OBJECMAPPER)
 	public ObjectMapper objectMapper;
 
+	@GetMapping(value = URI_CHECK_SLUG, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CheckSlugRsp create(@PathVariable String key) {
+		return new CheckSlugRsp(jsonCache.asMap().containsKey(new StringKey(key)));
+	}
 	@PostMapping(value = URI_API, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@RequestBody JsonNode value) {
 		return create(null, value);

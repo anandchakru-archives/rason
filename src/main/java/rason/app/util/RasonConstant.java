@@ -6,6 +6,7 @@ public class RasonConstant {
 	public static final String URI_API = "/api";
 	public static final String URI_API_KEYS = "/api/keys";
 	public static final String URI_API_WITH_KEY = "/api/{key}";
+	public static final String URI_CHECK_SLUG = "/cs/{key}";
 	public static final String URI_BU_MAP = "/bum";
 	public static final String URI_BU_LIST = "/bul";
 	//
@@ -19,6 +20,7 @@ public class RasonConstant {
 	public static final String BEAN_JSON_OBJECMAPPER = "jsonObjectMapper";
 	public static final String BEAN_SLUGGER = "sluggerService";
 	public static final String BEAN_CORS_FILTER = "corsFilter";
+	public static final String BEAN_UID_FILTER = "uidFilter";
 	public static final String BEAN_PIR = "pir";
 
 	//

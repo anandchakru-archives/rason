@@ -100,6 +100,7 @@ curl -is http://localhost:9090/stats
 - [x] Random JSON
 - [x] Counter based StringKey and JsonVal, a wrapper for JsonNode
 - [x] Caffeine cache
+- [x] Shift Click on saveJSON for custom slug.
 - [ ] Frequently used JSON samples
   * [ ] Oauth token response
   * [ ] Employee-Department

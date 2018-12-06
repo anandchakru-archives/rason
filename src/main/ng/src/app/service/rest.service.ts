@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 
 import { map, catchError } from 'rxjs/operators';
 import { Key } from '../model/key';
+import { CheckSlugRsp } from '../model/checkSlug.rsp';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,11 @@ export class RestService {
   cacheCount(): Observable<Key[]>{
     return this.http.get<Key[]>('api/keys',this.httpOptions).pipe(catchError(this.handleError('cacheCount')));
   }
-  create (json: string): Observable<Key> {
-      return this.http.post<Key>('api/',json,this.httpOptions).pipe(catchError(this.handleError('create',json)));
+  checkSlug(slug:string):Observable<CheckSlugRsp>{
+    return this.http.get<CheckSlugRsp>('cs/'+slug, this.httpOptions).pipe(catchError(this.handleError('checkSlug',slug)));
+  }
+  create (json: string, slug?:string): Observable<Key> {
+    return this.http.post<Key>('api/'+(slug && slug.length>0?slug:''),json,this.httpOptions).pipe(catchError(this.handleError('create',json)));
   }
   fetchJson(url:string):Observable<any>{
     return this.http.get<any>(url,this.httpOptions).pipe(catchError(this.handleError('fetchJson',url)))
