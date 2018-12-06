@@ -7,6 +7,9 @@ import { NgcCookieConsentModule, NgcCookieConsentConfig } from 'ngx-cookieconsen
 import { AppComponent } from './app.component';
 import { CookieComponent } from './cookie/cookie.component';
 import { JsonViewComponent } from './json-view/json-view.component';
+import { HttpClientModule } from '@angular/common/http';
+import { GrowlModule } from './growl/growl.module';
+import { LoadModule } from './load/load.module';
 
 
 const cookieconfig: NgcCookieConsentConfig= {
@@ -39,7 +42,10 @@ const cookieconfig: NgcCookieConsentConfig= {
   imports: [
     BrowserModule,
     FormsModule,
-    NgcCookieConsentModule.forRoot(cookieconfig)
+    HttpClientModule,
+    NgcCookieConsentModule.forRoot(cookieconfig),
+    GrowlModule,
+    LoadModule
   ],
   providers: [
   ],

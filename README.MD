@@ -104,13 +104,17 @@ curl -is http://localhost:9090/stats
   * [ ] User-Address
   * [ ] Student-Teacher
   * [ ] Blog post
-- [ ] Permanently live JSON (mysql/firebase + cache)
-- [ ] Private JSON (use oauth/authslug/jwt?)
 - [ ] UI to validate, format, compress JSON
 - [ ] Support for simple logical expressions (eg: EQ, OR, AND)
 - [ ] SSL support
 - [ ] dynamic expiry
 - [ ] Payload version
+
+## Ambitious Tasks
+- [ ] Access-Control-Allow-Origin as * instead of hosted website
+- [ ] Dynamic expiry time for data
+- [ ] Permanent data (mysql/firebase + cache)
+- [ ] Private data (use oauth/authslug/jwt?)
 
 ## UI
 

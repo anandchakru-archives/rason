@@ -2,9 +2,9 @@
     <div class="container-fluid">
         <div class="btn-toolbar" role="toolbar" aria-label="Options">
             <div class="btn-group" role="group" aria-label="Json Options">
-                <button #copyPrettyJson type="button" class="btn btn-primary" [ngClass]="btnClass" title="Beautify" (click)="formatAndCopyPrettyJson(tainput.value)"><i class="fas fa-indent"></i></button>
-                <button #copyUglyJson type="button" class="btn btn-primary" [ngClass]="btnClass" title="Uglify" (click)="formatAndCopyUglyJson(tainput.value)"><i class="fas fa-file-archive"></i></button>
-                <button #copyPrettyJson type="button" class="btn btn-primary" [ngClass]="btnClass" title="Expand/Collapse" (click)="expCollapse()">
+                <button #btnBeautifyJson type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Beautify" (click)="beautifyJson(tainput.value)"><i class="fas fa-indent"></i></button>
+                <button #btnUglyJson type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Uglify" (click)="uglifyJson(tainput.value)"><i class="fas fa-file-archive"></i></button>
+                <button #btnExpandCollapse type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Expand/Collapse" (click)="expCollapse()">
                     <span *ngIf="!expanded">
                         <i class="fas fa-plus-square"></i>
                     </span>
@@ -14,9 +14,12 @@
                 </button>
             </div>
             <div class="btn-group" role="group" aria-label="Rason Cache Options">
-                <button type="button" class="btn btn-info" [ngClass]="btnClass" title="Save to Rason Cache"><i class="fas fa-upload"></i></button>
-                <button type="button" class="btn btn-info" [ngClass]="btnClass" title="Load from url"><i class="fas fa-download"></i></button>
-                <button type="button" class="btn btn-info" title="Previously Saved"><i class="fas fa-bell"></i></button>
+                <button #btnSaveJson type="button" class="btn btn-info" [ngClass]="disableBtnClass" title="Save to Rason Cache" (click)="createJson(tainput.value)"><i class="fas fa-upload"></i></button>
+                <button #btnUrl type="button" class="btn btn-info" title="Load from url" (click)="toggleHideUrl()"><i class="fas fa-location-arrow"></i></button>
+                <button #btnNofication type="button" class="btn btn-info" title="Previously Saved">
+                    <i class="fas fa-bell"></i>
+                    <span class="badge badge-secondary">{{slugs?.length}}</span>
+                </button>
             </div>
         </div>
     </div>
@@ -24,35 +27,26 @@
 
 
 <div class="container-fluid">
-    <div class="row">
+    <div class="row" [hidden]="hideUrl">
         <div class="col-12">
-            <div class="form-group hundred">
-                <textarea id="tainput" class="form-control ip" [ngClass]="txtClass" #tainput [ngModel]="input" (keyup)="formatJson(tainput.value)" placeholder='{"id":"1","name":"rason"}'></textarea>
+            <div class="form-group">
+                <input type="text" class="form-control ip" [ngClass]="urlClass" #urlInput [ngModel]="urlInputVal" (keyup)="updateUrl(urlInput.value)" placeholder="https://api.github.com/repos/anandchakru/rason">
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-12">
-            <app-json-view [json]="inputJson" [expanded]="expanded" *ngIf="!err?.length"></app-json-view>
+            <div class="form-group hundred">
+                <textarea id="tainput" class="form-control ip" [ngClass]="txtClass" #tainput [ngModel]="taInputVal" (keyup)="update(tainput.value)" placeholder='{"id":"1","name":"rason"}'></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <app-json-view #appJsonView [json]="inputJson" [expanded]="expanded" *ngIf="!err?.length"></app-json-view>
         </div>
     </div>
 </div>
-<!--
-<div class="d-flex h-100">
-    <div class="p-2 bg-secondary flex-fill scrollable">
-        <div class="editor form-group hundred">
-            <textarea id="tainput" class="form-control ip hundred" #tainput [ngModel]="input" (keyup)="formatJson(tainput.value)" placeholder="Enter valid json"></textarea>
-        </div>
-    </div>
-    <div class="p-1 bg-dark flex-1 resizable">
-    </div>
-    <div class="p-2 bg-secondary flex-fill scrollable">
-        <div class="viewer">
-            <app-json-view [json]="inputJson" [expanded]="expanded" *ngIf="!err?.length"></app-json-view>
-        </div>
-    </div>
-</div>
--->
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-light fixed-bottom">
     <div class="container-fluid">
@@ -61,3 +55,5 @@
 </nav>
 
 <app-cookie></app-cookie>
+<app-growli></app-growli>
+<app-loadi #loadiComponent></app-loadi>

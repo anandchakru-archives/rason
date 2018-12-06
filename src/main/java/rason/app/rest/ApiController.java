@@ -6,8 +6,10 @@ import static rason.app.util.RasonConstant.BEAN_SLUGGER;
 import static rason.app.util.RasonConstant.DEFAULT_KEY;
 import static rason.app.util.RasonConstant.NOT_FOUND;
 import static rason.app.util.RasonConstant.URI_API;
+import static rason.app.util.RasonConstant.URI_API_KEYS;
 import static rason.app.util.RasonConstant.URI_API_WITH_KEY;
 import static rason.app.util.RasonConstant.URI_BASE;
+import java.util.Set;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -46,6 +48,11 @@ public class ApiController {
 	}
 	@PostMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@PathVariable String key, @RequestBody JsonNode value) {
+		try {
+			Thread.sleep(1500);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		StringKey sKey = slugger.slug(key);
 		jsonCache.put(sKey, value);
 		return sKey;
@@ -72,6 +79,10 @@ public class ApiController {
 			throw new RasonException(NOT_FOUND);
 		}
 		return jsonNode;
+	}
+	@GetMapping(value = URI_API_KEYS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody Set<StringKey> keys() {
+		return jsonCache.asMap().keySet();
 	}
 	@DeleteMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey delete(@PathVariable String key) {

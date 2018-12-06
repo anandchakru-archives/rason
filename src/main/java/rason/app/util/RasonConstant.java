@@ -4,6 +4,7 @@ public class RasonConstant {
 	//
 	public static final String URI_BASE = "/";
 	public static final String URI_API = "/api";
+	public static final String URI_API_KEYS = "/api/keys";
 	public static final String URI_API_WITH_KEY = "/api/{key}";
 	public static final String URI_BU_MAP = "/bum";
 	public static final String URI_BU_LIST = "/bul";
