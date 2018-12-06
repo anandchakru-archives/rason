@@ -19,10 +19,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.util.ReflectionTestUtils;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
 import rason.app.config.RasonConfig;
+import rason.app.model.JsonVal;
 import rason.app.model.StringKey;
 
 @SpringBootTest
@@ -36,7 +36,7 @@ public class SluggerServiceTest {
 	private RasonSettings settings;
 	@Autowired
 	@Qualifier(value = BEAN_JSON_CACHE)
-	private Cache<StringKey, JsonNode> jsonCache;
+	private Cache<StringKey, JsonVal> jsonCache;
 	private final String SLUG = "3p14s5";
 
 	@BeforeClass
@@ -50,7 +50,7 @@ public class SluggerServiceTest {
 		when(slugger.slug(isNull())).thenCallRealMethod();
 		ReflectionTestUtils.setField(slugger, "settings", settings);
 		ReflectionTestUtils.setField(slugger, BEAN_JSON_CACHE, jsonCache);
-		jsonCache.put(new StringKey(SLUG), new ObjectMapper().readTree("{}"));
+		jsonCache.put(new StringKey(SLUG), new JsonVal(new ObjectMapper().readTree("{}")));
 	}
 	@Test
 	public void testSlug() {

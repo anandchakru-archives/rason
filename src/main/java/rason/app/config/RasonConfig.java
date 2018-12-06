@@ -9,12 +9,11 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.RemovalListener;
-import com.google.common.cache.RemovalNotification;
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalCause;
+import rason.app.model.JsonVal;
 import rason.app.model.StringKey;
 import rason.app.service.RasonSettings;
 
@@ -33,14 +32,14 @@ public class RasonConfig implements WebMvcConfigurer {
 		registry.addMapping("/**");
 	}
 	@Bean(name = { BEAN_JSON_CACHE })
-	public Cache<StringKey, JsonNode> jsonCache() {
-		return CacheBuilder.newBuilder().maximumSize(settings.getMaxCacheSize())
+	public Cache<StringKey, JsonVal> jsonCache() {
+		return Caffeine.newBuilder().maximumSize(settings.getMaxCacheSize())
 				.expireAfterWrite(settings.getMaxCacheLifeMinutes(), TimeUnit.MINUTES)
-				.removalListener(new RemovalListener<StringKey, JsonNode>() {
+				.removalListener(new com.github.benmanes.caffeine.cache.RemovalListener<StringKey, JsonVal>() {
 					@Override
-					public void onRemoval(RemovalNotification<StringKey, JsonNode> notification) {
-						System.out.println("Evicted: " + notification.getKey().getSlug());
+					public void onRemoval(StringKey key, JsonVal value, RemovalCause cause) {
+						System.out.println("Evicted: " + key.getSlug() + "@" + cause);
 					}
-				}).recordStats().build();
+				}).build();
 	}
 }

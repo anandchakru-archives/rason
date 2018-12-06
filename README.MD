@@ -98,6 +98,8 @@ curl -is http://localhost:9090/stats
 - [x] Live Demo @ https://rason.herokuapp.com/
 - [x] Bulk upload
 - [x] Random JSON
+- [x] Counter based StringKey and JsonVal, a wrapper for JsonNode
+- [x] Caffeine cache
 - [ ] Frequently used JSON samples
   * [ ] Oauth token response
   * [ ] Employee-Department

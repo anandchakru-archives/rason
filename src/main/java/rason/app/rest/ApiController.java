@@ -24,7 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
+import rason.app.model.JsonVal;
 import rason.app.model.RasonException;
 import rason.app.model.StrResponse;
 import rason.app.model.StringKey;
@@ -34,7 +35,7 @@ import rason.app.service.SluggerService;
 public class ApiController {
 	@Autowired
 	@Qualifier(value = BEAN_JSON_CACHE)
-	private Cache<StringKey, JsonNode> jsonCache;
+	private Cache<StringKey, JsonVal> jsonCache;
 	@Autowired
 	@Qualifier(value = BEAN_SLUGGER)
 	private SluggerService slugger;
@@ -49,13 +50,13 @@ public class ApiController {
 	@PostMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@PathVariable String key, @RequestBody JsonNode value) {
 		StringKey sKey = slugger.slug(key);
-		jsonCache.put(sKey, value);
+		jsonCache.put(sKey, new JsonVal(value));
 		return sKey;
 	}
 	@PutMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey update(@PathVariable String key, @RequestBody JsonNode value) {
 		StringKey sKey = new StringKey(key);
-		jsonCache.put(sKey, value);
+		jsonCache.put(sKey, new JsonVal(value));
 		return sKey;
 	}
 	@GetMapping(value = URI_API + URI_BASE + DEFAULT_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -63,13 +64,17 @@ public class ApiController {
 		StringKey key = slugger.slug(null);
 		StrResponse rsp = new StrResponse();
 		rsp.setPayload(UUID.randomUUID().toString().replace("-", ""));
-		jsonCache.put(key, objectMapper.valueToTree(rsp));
+		jsonCache.put(key, new JsonVal(objectMapper.valueToTree(rsp)));
 		return key;
 	}
 	@GetMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody JsonNode read(@PathVariable String key) {
 		StringKey sKey = new StringKey(key);
-		JsonNode jsonNode = jsonCache.asMap().get(sKey);
+		JsonVal jsonVal = jsonCache.asMap().get(sKey);
+		if (jsonVal == null) {
+			throw new RasonException(NOT_FOUND);
+		}
+		JsonNode jsonNode = jsonVal.getVal();
 		if (jsonNode == null) {
 			throw new RasonException(NOT_FOUND);
 		}

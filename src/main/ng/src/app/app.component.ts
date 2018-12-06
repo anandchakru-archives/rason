@@ -21,6 +21,7 @@ export class AppComponent implements OnInit {
   disableBtnClass:string;
   urlClass: string;
   txtClass:string;
+  searchNotificationsVal:string;
   urlInputVal: string;
   taInputVal: string='{}';
   inputJson: JSON;
@@ -119,7 +120,7 @@ export class AppComponent implements OnInit {
       this.txtClass='border-danger';
       return;
     }
-    let loadi:Loadi = this.showLoadi('fetching', 25000);
+    let loadi:Loadi = this.showLoadi('loading', 25000);
     try {
       this.err = undefined;
       this.inputJson = JSON.parse(input);
@@ -135,6 +136,9 @@ export class AppComponent implements OnInit {
     }
   }
   createJson(json: string){
+    if(!json || json.length<8){
+      return;
+    }
     this.renderer2.addClass(this.btnSaveJson.nativeElement, 'btn-warning');
     this.renderer2.addClass(this.btnSaveJson.nativeElement, 'disabled');
     setTimeout(() => {
@@ -180,7 +184,8 @@ export class AppComponent implements OnInit {
     this.loadiComponent.loadis.splice(loadiIndex, 1);
     return loadiIndex;
   }
-  showPopper(){
-    alert('popper');
+  loadUrl(url:string){
+    this.updateUrl(url);
+    return false;
   }
 }

@@ -15,8 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
 import rason.app.model.BulkUploadRsp;
+import rason.app.model.JsonVal;
 import rason.app.model.StringKey;
 import rason.app.service.SluggerService;
 
@@ -24,7 +25,7 @@ import rason.app.service.SluggerService;
 public class BulkUploadController {
 	@Autowired
 	@Qualifier(value = BEAN_JSON_CACHE)
-	private Cache<StringKey, JsonNode> jsonCache;
+	private Cache<StringKey, JsonVal> jsonCache;
 	@Autowired
 	@Qualifier(value = BEAN_SLUGGER)
 	private SluggerService slugger;
@@ -37,7 +38,7 @@ public class BulkUploadController {
 			while (iterator.hasNext()) {
 				String reqKey = iterator.next();
 				StringKey sKey = slugger.slug(reqKey);
-				jsonCache.put(sKey, payload.get(reqKey));
+				jsonCache.put(sKey, new JsonVal(payload.get(reqKey)));
 				rsp.add(reqKey, sKey);
 			}
 		}
@@ -49,7 +50,7 @@ public class BulkUploadController {
 		if (payload != null && !payload.isEmpty()) {
 			for (JsonNode value : payload) {
 				StringKey sKey = slugger.slug(null);
-				jsonCache.put(sKey, value);
+				jsonCache.put(sKey, new JsonVal(value));
 				rsp.add(sKey.getSlug(), sKey);
 			}
 		}

@@ -4,12 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "v": "node src/version.js",
-    "s": "npm run v && ng serve --proxy-config proxy.conf.json",
-    "build": "npm version patch && ng build",
+    "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "v": "node src/version.js",
+    "s": "npm run v && ng serve --proxy-config proxy.conf.json",
+    "b": "npm version patch && npm run build"
   },
   "private": true,
   "dependencies": {
@@ -28,7 +29,6 @@
     "cookieconsent": "^3.1.0",
     "core-js": "^2.5.4",
     "jquery": "^3.3.1",
-    "ng2-ace-editor": "^0.3.8",
     "ngx-cookieconsent": "^2.0.0",
     "popper.js": "^1.14.6",
     "rxjs": "~6.3.3",

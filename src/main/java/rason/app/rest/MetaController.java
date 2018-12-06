@@ -11,9 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.cache.Cache;
+import com.github.benmanes.caffeine.cache.Cache;
 import rason.app.model.CacheStatsResponse;
+import rason.app.model.JsonVal;
 import rason.app.model.StrResponse;
 import rason.app.model.StringKey;
 import rason.app.service.RasonSettings;
@@ -22,7 +22,7 @@ import rason.app.service.RasonSettings;
 public class MetaController {
 	@Qualifier(value = BEAN_JSON_CACHE)
 	@Autowired
-	private Cache<StringKey, JsonNode> jsonCache;
+	private Cache<StringKey, JsonVal> jsonCache;
 	@Autowired
 	private RasonSettings settings;
 
@@ -32,6 +32,7 @@ public class MetaController {
 	}
 	@GetMapping(value = URI_STATS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CacheStatsResponse stats() {
-		return new CacheStatsResponse(jsonCache.size(), settings.getMaxCacheSize(), settings.getMaxCacheLifeMinutes());
+		return new CacheStatsResponse(jsonCache.estimatedSize(), settings.getMaxCacheSize(),
+				settings.getMaxCacheLifeMinutes());
 	}
 }
