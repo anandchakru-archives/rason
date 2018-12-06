@@ -16,7 +16,7 @@
             <div class="btn-group" role="group" aria-label="Rason Cache Options">
                 <button #btnSaveJson type="button" class="btn btn-info" [ngClass]="disableBtnClass" title="Save to Rason Cache" (click)="createJson(tainput.value)"><i class="fas fa-upload"></i></button>
                 <button #btnUrl type="button" class="btn btn-info" title="Load from url" (click)="toggleHideUrl()"><i class="fas fa-location-arrow"></i></button>
-                <button #btnNofication type="button" class="btn btn-info" title="Previously Saved">
+                <button #btnNofication type="button" class="btn btn-info" title="Previously Saved" (click)="showPopper()">
                     <i class="fas fa-bell"></i>
                     <span class="badge badge-secondary">{{slugs?.length}}</span>
                 </button>

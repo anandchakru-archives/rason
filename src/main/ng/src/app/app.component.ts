@@ -180,4 +180,7 @@ export class AppComponent implements OnInit {
     this.loadiComponent.loadis.splice(loadiIndex, 1);
     return loadiIndex;
   }
+  showPopper(){
+    alert('popper');
+  }
 }
