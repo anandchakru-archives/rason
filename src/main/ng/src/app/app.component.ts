@@ -10,15 +10,16 @@ import { LoadiComponent } from './load/loadi/loadi.component';
 import { Loadi } from './model/loadi';
 import { JsonViewComponent } from './json-view/json-view.component';
 import { VERSION } from 'src/environments/version';
-import * as $ from 'jquery';
+//import * as $ from 'jquery';
 import { CheckSlugRsp } from './model/checkSlug.rsp';
+import { DataPair } from './model/data.pair';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   err: string;
   disableBtnClass:string;
   urlClass: string;
@@ -35,7 +36,8 @@ export class AppComponent implements OnInit {
   slugInputModalStyle:any={"display": "none"};
   slugs: Key[];
   version = VERSION;
-  slugSub:Subject<Key>  = new Subject();
+  slugSub:Subject<DataPair>  = new Subject();
+  slugSubSubs:Subscription;
   @ViewChild('btnBeautifyJson') btnBeautifyJson: ElementRef;
   @ViewChild('btnUglyJson') btnUglyJson: ElementRef;
   @ViewChild('btnSaveJson') btnSaveJson: ElementRef;
@@ -55,6 +57,12 @@ export class AppComponent implements OnInit {
     this.rest.cacheCount().subscribe((key:Key[])=>{
       this.slugs = key;
     });
+    this.slugSubSubs = this.slugSub.subscribe((dp:DataPair)=>{
+      this.createJson(dp.val, undefined, dp.key.slug);
+    });
+  }
+  ngOnDestroy(): void {
+    this.slugSubSubs.unsubscribe();
   }
   beautifyJson(json: string) {
     this.update(json);
@@ -158,17 +166,17 @@ export class AppComponent implements OnInit {
       });
     }
   }
-  saveJson(slug:string){
+  saveJson(slug:string, json:string){
     this.slugInputClass='';
     const key:Key = new Key();
     key.slug = slug;
-    this.slugSub.next(key);
+    const dp:DataPair = new DataPair();
+    dp.key=key;
+    dp.val = json;
+    this.slugSub.next(dp);
   }
   createJson(json: string, event, slug?:string){
     if(event && event.shiftKey){
-      this.slugSub.subscribe((key:Key)=>{
-        this.createJson(json, undefined, key.slug);
-      });
       this.slugInputModalClass='show';
       this.slugInputModalStyle={"display": "block"};
       return;
