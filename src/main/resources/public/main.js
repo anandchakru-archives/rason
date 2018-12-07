@@ -30,7 +30,7 @@ webpackEmptyAsyncContext.id = "./src/$$_lazy_route_resource lazy recursive";
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<nav class=\"navbar navbar-expand-sm bg-dark navbar-light sticky-top\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"btn-toolbar\" role=\"toolbar\" aria-label=\"Options\">\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Json Options\">\r\n                <button #btnBeautifyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Beautify\" (click)=\"beautifyJson(tainput.value)\"><i class=\"fas fa-indent\"></i></button>\r\n                <button #btnUglyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Uglify\" (click)=\"uglifyJson(tainput.value)\"><i class=\"fas fa-file-archive\"></i></button>\r\n                <button #btnExpandCollapse type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Expand/Collapse\" (click)=\"expCollapse()\">\r\n                    <span *ngIf=\"!expanded\">\r\n                        <i class=\"fas fa-plus-square\"></i>\r\n                    </span>\r\n                    <span *ngIf=\"expanded\" >\r\n                        <i class=\"fas fa-minus-square\"></i>\r\n                    </span>\r\n                </button>\r\n            </div>\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Rason Cache Options\">\r\n                <button #btnSaveJson type=\"button\" class=\"btn btn-info\" [ngClass]=\"disableBtnClass\" title=\"Save to Rason Cache\" (click)=\"createJson(tainput.value, $event)\"><i class=\"fas fa-upload\"></i></button>\r\n                <button #btnUrl type=\"button\" class=\"btn btn-info\" title=\"Load from url\" (click)=\"toggleHideUrl()\"><i class=\"fas fa-location-arrow\"></i></button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</nav>\r\n\r\n\r\n<div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n        <div class=\"col-11\">\r\n            <div class=\"row\" [hidden]=\"hideUrl\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group\">\r\n                        <input type=\"text\" class=\"form-control ip\" [ngClass]=\"urlClass\" #urlInput [ngModel]=\"urlInputVal\" (keyup)=\"updateUrl(urlInput.value)\" placeholder=\"https://api.github.com/repos/anandchakru/rason\">\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group hundred\">\r\n                        <textarea id=\"tainput\" class=\"form-control ip\" [ngClass]=\"txtClass\" #tainput [ngModel]=\"taInputVal\" (keyup)=\"update(tainput.value)\" placeholder='{\"id\":\"1\",\"name\":\"rason\"}'></textarea>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <app-json-view #appJsonView [json]=\"inputJson\" [expanded]=\"expanded\" *ngIf=\"!err?.length\"></app-json-view>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-1 bg-secondary d-none d-md-block d-lg-block d-xl-block\">\r\n            <input type=\"text\" class=\"form-control ip\" #searchNotifications [ngModel]=\"searchNotificationsVal\" (keyup)=\"search(searchNotifications.value)\" placeholder=\"search\">\r\n            <div class=\"list-group\">\r\n                <a href=\"#\" (click)=\"loadUrl('api/'+key.slug)\" class=\"list-group-item list-group-item-action\" *ngFor=\"let key of slugs\">{{key.slug}}</a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<nav class=\"navbar navbar-expand-sm bg-dark navbar-light fixed-bottom\">\r\n    <div class=\"container-fluid\">\r\n        <span class=\"text-white\">simple scalable service virtualization (json).</span>\r\n    </div>\r\n</nav>\r\n\r\n<app-cookie></app-cookie>\r\n<app-growli></app-growli>\r\n<app-loadi #loadiComponent></app-loadi>\r\n<div id=\"versionInfo\" class=\"sr-only text-hide\">\r\n    {{version | json}}\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"slugIpModal\" [ngClass]=\"slugInputModalClass\" [ngStyle]=\"slugInputModalStyle\">\r\n    <div class=\"modal-dialog modal-sm modal-dialog-centered\">\r\n      <div class=\"modal-content\">\r\n  \r\n        <!-- Modal Header -->\r\n        <div class=\"modal-header\">\r\n          <h4 class=\"modal-title\">Custom Slug</h4>\r\n          <button type=\"button\" class=\"close\" (click)=\"hideSlugInputModal()\">&times;</button>\r\n        </div>\r\n  \r\n        <!-- Modal body -->\r\n        <div class=\"modal-body\">\r\n            <input type=\"text\" class=\"form-control ip\" [ngClass]=\"slugInputClass\" #slugInput (keyup)=\"checkSlug(slugInput.value)\" placeholder=\"slug\">\r\n        </div>\r\n  \r\n        <!-- Modal footer -->\r\n        <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-danger\" (click)=\"saveJson(slugInput.value, tainput.value)\">Save</button>\r\n        </div>\r\n  \r\n      </div>\r\n    </div>\r\n</div>"
+module.exports = "<nav class=\"navbar navbar-expand-sm bg-dark navbar-light sticky-top\">\r\n    <div class=\"container-fluid\">\r\n        <div class=\"btn-toolbar\" role=\"toolbar\" aria-label=\"Options\">\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Json Options\">\r\n                <button #btnBeautifyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Beautify. Shift+click to beautify and copy to clipboard.\" (click)=\"beautifyJson(tainput.value, $event)\"><i class=\"fas fa-indent\"></i></button>\r\n                <button #btnUglyJson type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Uglify. Shift+click to uglify and copy to clipboard.\" (click)=\"uglifyJson(tainput.value, $event)\"><i class=\"fas fa-file-archive\"></i></button>\r\n                <button #btnExpandCollapse type=\"button\" class=\"btn btn-primary\" [ngClass]=\"disableBtnClass\" title=\"Expand/Collapse\" (click)=\"expCollapse()\">\r\n                    <span *ngIf=\"!expanded\">\r\n                        <i class=\"fas fa-plus-square\"></i>\r\n                    </span>\r\n                    <span *ngIf=\"expanded\" >\r\n                        <i class=\"fas fa-minus-square\"></i>\r\n                    </span>\r\n                </button>\r\n            </div>\r\n            <div class=\"btn-group\" role=\"group\" aria-label=\"Rason Cache Options\">\r\n                <button #btnSaveJson type=\"button\" class=\"btn btn-info\" [ngClass]=\"disableBtnClass\" title=\"Save to Rason Cache\" (click)=\"createJson(tainput.value, $event)\"><i class=\"fas fa-upload\"></i></button>\r\n                <button #btnUrl type=\"button\" class=\"btn btn-info\" title=\"Load from url\" (click)=\"toggleHideUrl()\"><i class=\"fas fa-location-arrow\"></i></button>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</nav>\r\n\r\n\r\n<div class=\"container-fluid\">\r\n    <div class=\"row\">\r\n        <div class=\"col-11\">\r\n            <div class=\"row\" [hidden]=\"hideUrl\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group\">\r\n                        <input type=\"text\" class=\"form-control ip\" [ngClass]=\"urlClass\" #urlInput [ngModel]=\"urlInputVal\" (keyup)=\"updateUrl(urlInput.value)\" placeholder=\"https://api.github.com/repos/anandchakru/rason\">\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <div class=\"form-group hundred\">\r\n                        <textarea id=\"tainput\" class=\"form-control ip\" [ngClass]=\"txtClass\" #tainput [ngModel]=\"taInputVal\" (keyup)=\"update(tainput.value)\" placeholder='{\"id\":\"1\",\"name\":\"rason\"}'></textarea>\r\n                    </div>\r\n                </div>\r\n            </div>\r\n            <div class=\"row\">\r\n                <div class=\"col-12\">\r\n                    <app-json-view #appJsonView [json]=\"inputJson\" [expanded]=\"expanded\" *ngIf=\"!err?.length\"></app-json-view>\r\n                </div>\r\n            </div>\r\n        </div>\r\n        <div class=\"col-1 bg-secondary d-none d-md-block d-lg-block d-xl-block\">\r\n            <input type=\"text\" class=\"form-control ip\" #searchNotifications [ngModel]=\"searchNotificationsVal\" (keyup)=\"search(searchNotifications.value)\" placeholder=\"search\">\r\n            <div class=\"list-group\">\r\n                <a href=\"#\" (click)=\"loadUrl('api/'+key.slug)\" class=\"list-group-item list-group-item-action\" *ngFor=\"let key of slugs\">{{key.slug}}</a>\r\n            </div>\r\n        </div>\r\n    </div>\r\n</div>\r\n\r\n<nav class=\"navbar navbar-expand-sm bg-dark navbar-light fixed-bottom\">\r\n    <div class=\"container-fluid\">\r\n        <span class=\"text-white\" (click)=\"showVersion()\">simple scalable service virtualization (json).</span>\r\n    </div>\r\n</nav>\r\n\r\n<app-cookie></app-cookie>\r\n<app-growli></app-growli>\r\n<app-loadi #loadiComponent></app-loadi>\r\n<div id=\"versionInfo\" class=\"sr-only text-hide\">\r\n    {{version | json}}\r\n</div>\r\n\r\n<div class=\"modal fade\" id=\"slugIpModal\" [ngClass]=\"slugInputModalClass\" [ngStyle]=\"slugInputModalStyle\">\r\n    <div class=\"modal-dialog modal-sm modal-dialog-centered\">\r\n      <div class=\"modal-content\">\r\n  \r\n        <!-- Modal Header -->\r\n        <div class=\"modal-header\">\r\n          <h4 class=\"modal-title\">Custom Slug</h4>\r\n          <button type=\"button\" class=\"close\" (click)=\"hideSlugInputModal()\">&times;</button>\r\n        </div>\r\n  \r\n        <!-- Modal body -->\r\n        <div class=\"modal-body\">\r\n            <input type=\"text\" class=\"form-control ip\" [ngClass]=\"slugInputClass\" #slugInput (keyup)=\"checkSlug(slugInput.value)\" placeholder=\"slug\">\r\n        </div>\r\n  \r\n        <!-- Modal footer -->\r\n        <div class=\"modal-footer\">\r\n            <button type=\"button\" class=\"btn btn-danger\" (click)=\"saveJson(slugInput.value, tainput.value)\">Save</button>\r\n        </div>\r\n  \r\n      </div>\r\n    </div>\r\n</div>"
 
 /***/ }),
 
@@ -110,13 +110,13 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.ngOnDestroy = function () {
         this.slugSubSubs.unsubscribe();
     };
-    AppComponent.prototype.beautifyJson = function (json) {
+    AppComponent.prototype.beautifyJson = function (json, event) {
         var _this = this;
         this.update(json);
         if (this.inputJson) {
             var loadi = this.showLoadi('formatting', 25000);
             var content = JSON.stringify(this.inputJson, undefined, 2);
-            this.copied = this.clip.copyFromContent(content);
+            this.copied = (event && event.shiftKey) ? this.clip.copyFromContent(content) : false;
             this.renderer2.removeClass(this.btnBeautifyJson.nativeElement, 'btn-primary');
             this.renderer2.addClass(this.btnBeautifyJson.nativeElement, 'btn-success');
             this.taInputVal = content;
@@ -130,13 +130,13 @@ var AppComponent = /** @class */ (function () {
             this.hideLoadi(loadi);
         }
     };
-    AppComponent.prototype.uglifyJson = function (json) {
+    AppComponent.prototype.uglifyJson = function (json, event) {
         var _this = this;
         this.update(json);
         if (this.inputJson) {
             var loadi = this.showLoadi('compressing', 25000);
             var content = JSON.stringify(this.inputJson);
-            this.copied = this.clip.copyFromContent(content);
+            this.copied = (event && event.shiftKey) ? this.clip.copyFromContent(content) : false;
             this.renderer2.removeClass(this.btnUglyJson.nativeElement, 'btn-primary');
             this.renderer2.addClass(this.btnUglyJson.nativeElement, 'btn-success');
             this.taInputVal = content;
@@ -298,6 +298,9 @@ var AppComponent = /** @class */ (function () {
     AppComponent.prototype.loadUrl = function (url) {
         this.updateUrl(url);
         return false;
+    };
+    AppComponent.prototype.showVersion = function () {
+        this.growliService.addAlert(JSON.stringify(this.version), _model_alert__WEBPACK_IMPORTED_MODULE_7__["AlertType"].INFO);
     };
     tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["ViewChild"])('btnBeautifyJson'),
@@ -1223,15 +1226,15 @@ __webpack_require__.r(__webpack_exports__);
 // IMPORTANT: THIS FILE IS AUTO GENERATED! DO NOT MANUALLY EDIT OR CHECKIN!
 /* tslint:disable */
 var VERSION = {
-    "dirty": false,
-    "raw": "bb6fee4",
-    "hash": "bb6fee4",
+    "dirty": true,
+    "raw": "03a87e5-dirty",
+    "hash": "03a87e5",
     "distance": null,
     "tag": null,
     "semver": null,
-    "suffix": "bb6fee4",
+    "suffix": "03a87e5-dirty",
     "semverString": null,
-    "version": "1.0.12"
+    "version": "1.0.18"
 };
 /* tslint:enable */
 

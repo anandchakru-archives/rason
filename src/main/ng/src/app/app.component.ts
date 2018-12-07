@@ -64,12 +64,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.slugSubSubs.unsubscribe();
   }
-  beautifyJson(json: string) {
+  beautifyJson(json: string, event) {
     this.update(json);
     if (this.inputJson) {
       let loadi:Loadi = this.showLoadi('formatting', 25000);
       const content = JSON.stringify(this.inputJson, undefined, 2);
-      this.copied = this.clip.copyFromContent(content);
+      this.copied = (event && event.shiftKey)?this.clip.copyFromContent(content):false;
       this.renderer2.removeClass(this.btnBeautifyJson.nativeElement, 'btn-primary');
       this.renderer2.addClass(this.btnBeautifyJson.nativeElement, 'btn-success');
       this.taInputVal = content;
@@ -83,12 +83,12 @@ export class AppComponent implements OnInit, OnDestroy {
       this.hideLoadi(loadi);
     }
   }
-  uglifyJson(json: string) {
+  uglifyJson(json: string, event) {
     this.update(json);
     if (this.inputJson) {
       let loadi:Loadi = this.showLoadi('compressing', 25000);
       const content = JSON.stringify(this.inputJson);
-      this.copied = this.clip.copyFromContent(content);
+      this.copied = (event && event.shiftKey)?this.clip.copyFromContent(content):false;
       this.renderer2.removeClass(this.btnUglyJson.nativeElement, 'btn-primary');
       this.renderer2.addClass(this.btnUglyJson.nativeElement, 'btn-success');
       this.taInputVal = content;
@@ -240,5 +240,8 @@ export class AppComponent implements OnInit, OnDestroy {
   loadUrl(url:string){
     this.updateUrl(url);
     return false;
+  }
+  showVersion(){
+    this.growliService.addAlert(JSON.stringify(this.version), AlertType.INFO);
   }
 }

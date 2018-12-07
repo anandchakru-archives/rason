@@ -2,8 +2,8 @@
     <div class="container-fluid">
         <div class="btn-toolbar" role="toolbar" aria-label="Options">
             <div class="btn-group" role="group" aria-label="Json Options">
-                <button #btnBeautifyJson type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Beautify" (click)="beautifyJson(tainput.value)"><i class="fas fa-indent"></i></button>
-                <button #btnUglyJson type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Uglify" (click)="uglifyJson(tainput.value)"><i class="fas fa-file-archive"></i></button>
+                <button #btnBeautifyJson type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Beautify. Shift+click to beautify and copy to clipboard." (click)="beautifyJson(tainput.value, $event)"><i class="fas fa-indent"></i></button>
+                <button #btnUglyJson type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Uglify. Shift+click to uglify and copy to clipboard." (click)="uglifyJson(tainput.value, $event)"><i class="fas fa-file-archive"></i></button>
                 <button #btnExpandCollapse type="button" class="btn btn-primary" [ngClass]="disableBtnClass" title="Expand/Collapse" (click)="expCollapse()">
                     <span *ngIf="!expanded">
                         <i class="fas fa-plus-square"></i>
@@ -56,7 +56,7 @@
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-light fixed-bottom">
     <div class="container-fluid">
-        <span class="text-white">simple scalable service virtualization (json).</span>
+        <span class="text-white" (click)="showVersion()">simple scalable service virtualization (json).</span>
     </div>
 </nav>
 

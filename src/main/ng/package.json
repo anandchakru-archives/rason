@@ -1,6 +1,6 @@
 {
   "name": "ng",
-  "version": "1.0.13",
+  "version": "1.0.18",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "v": "node src/version.js",
     "s": "npm run v && ng serve --proxy-config proxy.conf.json",
-    "b": "npm version patch && npm run build"
+    "b": "npm version patch && npm run v && npm run build"
   },
   "private": true,
   "dependencies": {
