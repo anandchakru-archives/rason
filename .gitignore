@@ -33,6 +33,7 @@ Thumbs.db
 
 
 #
+src/main/resources/public/
 src/ng/src/environments/version.ts
 src/main/ng/src/environments/version\.ts
 src/main/ng/node/

@@ -40,4 +40,4 @@ fi
 
 echo -e "Patched Version: $V_MAJOR.$V_MINOR.$V_PATCH"
 
-#git tag "$V_MAJOR.$V_MINOR.$V_PATCH" -a "$V_MAJOR.$V_MINOR.$V_PATCH"
+git tag -a "$V_MAJOR.$V_MINOR.$V_PATCH" -m "$V_MAJOR.$V_MINOR.$V_PATCH" && git push && git push --tags

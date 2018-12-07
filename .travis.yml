@@ -10,6 +10,7 @@
 # Value for $HEROKU_OAUTH_TOKEN is generated from https://dashboard.heroku.com/account
 # and added to travis https://travis-ci.org/anandchakru/rason/settings
 
+# FYI: Value for $TRAVIS_BUILD_DIR is /home/travis/build/anandchakru/rason
 
 language: java
 install: 
@@ -19,6 +20,8 @@ script:
 cache:
   directories:
     - $HOME/.m2
+    - $TRAVIS_BUILD_DIR/src/main/ng/node
+    - $TRAVIS_BUILD_DIR/src/main/ng/node_modules
 branches:
   except:
   - test
@@ -32,7 +35,7 @@ deploy:
     api_key: $GITHUB_OAUTH_TOKEN
     file_glob: true
     file: 
-      - /home/travis/build/anandchakru/rason/target/rason-${TRAVIS_TAG}.jar
+      - $TRAVIS_BUILD_DIR/target/rason-${TRAVIS_TAG}.jar
     on:
       repo: anandchakru/rason
       branch: master
@@ -43,7 +46,7 @@ deploy:
     api_key: $HEROKU_OAUTH_TOKEN
     file_glob: true
     file: 
-      - /home/travis/build/anandchakru/rason/target/rason-${TRAVIS_TAG}.jar
+      - $TRAVIS_BUILD_DIR/target/rason-${TRAVIS_TAG}.jar
     on:
       repo: anandchakru/rason
       branch: master
