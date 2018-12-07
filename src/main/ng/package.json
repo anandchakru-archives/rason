@@ -10,7 +10,8 @@
     "e2e": "ng e2e",
     "v": "node src/version.js",
     "s": "npm run v && ng serve --proxy-config proxy.conf.json",
-    "b": "npm version patch && npm run v && npm run build"
+    "p": "npm version patch",
+    "b": "npm run build"
   },
   "private": true,
   "dependencies": {
