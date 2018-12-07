@@ -12,6 +12,8 @@
 
 
 language: java
+install: 
+- mvn dependency:resolve
 script:
 - mvn package -Drason.version=${TRAVIS_TAG} -Dmaven.javadoc.skip=true -B -V
 cache:
