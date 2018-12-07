@@ -41,14 +41,3 @@ deploy:
       branch: master
       tags: true
     skip_cleanup: true
-  - provider: heroku
-    app: rason
-    api_key: $HEROKU_OAUTH_TOKEN
-    file_glob: true
-    file: 
-      - $TRAVIS_BUILD_DIR/target/rason-${TRAVIS_TAG}.jar
-    on:
-      repo: anandchakru/rason
-      branch: master
-      tags: true
-    skip_cleanup: true
