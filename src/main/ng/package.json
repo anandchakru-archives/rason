@@ -11,7 +11,8 @@
     "v": "node src/version.js",
     "s": "npm run v && ng serve --proxy-config proxy.conf.json",
     "p": "npm version patch",
-    "b": "npm run build"
+    "i": "npm install",
+    "b": "npm run i && npm run build"
   },
   "private": true,
   "dependencies": {
