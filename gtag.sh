@@ -6,13 +6,6 @@ V_MAJOR=$(echo $V_CURRENT | cut -d. -f1)
 V_MINOR=$(echo $V_CURRENT | cut -d. -f2)
 V_PATCH=$(echo $V_CURRENT | cut -d. -f3)
 
-if [ -z "$2" ]
-then
-	echo -e "No"
-else
-	echo -e "Yes"
-fi
-
 if [ "$1" = "-j" -o "$1" = "-maj" -o "$1" = "-major" ]
 then
     if [ -z "$2" ]
@@ -40,4 +33,11 @@ fi
 
 echo -e "Patched Version: $V_MAJOR.$V_MINOR.$V_PATCH"
 
-git tag -a "$V_MAJOR.$V_MINOR.$V_PATCH" -m "$V_MAJOR.$V_MINOR.$V_PATCH" && git push && git push --tags
+echo -e "Tagging."
+git tag -a "$V_MAJOR.$V_MINOR.$V_PATCH" -m "$V_MAJOR.$V_MINOR.$V_PATCH"
+
+echo -e "Pushing commit."
+git push
+
+echo -e "Pushing tags."
+git push --tags

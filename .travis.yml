@@ -42,7 +42,7 @@ deploy:
       tags: true
     skip_cleanup: true
   - provider: heroku
-    app: rason
+    app: rason2
     api_key: $HEROKU_OAUTH_TOKEN
     file_glob: true
     file: 
