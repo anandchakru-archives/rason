@@ -13,5 +13,6 @@ public class RasonSettings implements Serializable {
 	private Integer slugMaxLength;
 	private Integer slugGenMaxRetry;
 	private Long maxCacheSize;
+	private Integer maxSessionLifeMinutes;
 	private Long maxCacheLifeMinutes;
 }

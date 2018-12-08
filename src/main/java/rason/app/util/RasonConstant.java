@@ -16,12 +16,14 @@ public class RasonConstant {
 	public static final String DEFAULT_KEY = "rnd";
 	public static final String HB_PREFIX = "beat_";
 	public static final String NOT_FOUND = "notfound";
-	public static final String BEAN_JSON_CACHE = "jsonCache";
+	public static final String BEAN_CACHE = "cacheService";
 	public static final String BEAN_JSON_OBJECMAPPER = "jsonObjectMapper";
 	public static final String BEAN_SLUGGER = "sluggerService";
 	public static final String BEAN_CORS_FILTER = "corsFilter";
 	public static final String BEAN_UID_FILTER = "uidFilter";
 	public static final String BEAN_PIR = "pir";
+	public static final String SESSION_CACHE = "cacheInSession";
+	public static final String SESSION_FLUX = "fluxInSession";
 
 	//
 	private RasonConstant() {

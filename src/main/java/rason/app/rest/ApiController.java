@@ -1,6 +1,6 @@
 package rason.app.rest;
 
-import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
+import static rason.app.util.RasonConstant.BEAN_CACHE;
 import static rason.app.util.RasonConstant.BEAN_JSON_OBJECMAPPER;
 import static rason.app.util.RasonConstant.BEAN_SLUGGER;
 import static rason.app.util.RasonConstant.DEFAULT_KEY;
@@ -25,29 +25,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.benmanes.caffeine.cache.Cache;
 import rason.app.model.CheckSlugRsp;
 import rason.app.model.JsonVal;
 import rason.app.model.RasonException;
 import rason.app.model.StrResponse;
 import rason.app.model.StringKey;
+import rason.app.service.CacheService;
 import rason.app.service.SluggerService;
 
 @RestController
 public class ApiController {
 	@Autowired
-	@Qualifier(value = BEAN_JSON_CACHE)
-	private Cache<StringKey, JsonVal> jsonCache;
-	@Autowired
 	@Qualifier(value = BEAN_SLUGGER)
 	private SluggerService slugger;
 	@Autowired
 	@Qualifier(BEAN_JSON_OBJECMAPPER)
-	public ObjectMapper objectMapper;
+	private ObjectMapper objectMapper;
+	@Autowired
+	@Qualifier(BEAN_CACHE)
+	private CacheService cacheService;
 
 	@GetMapping(value = URI_CHECK_SLUG, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CheckSlugRsp create(@PathVariable String key) {
-		return new CheckSlugRsp(jsonCache.asMap().containsKey(new StringKey(key)));
+		return new CheckSlugRsp(cacheService.cache().asMap().containsKey(new StringKey(key)));
 	}
 	@PostMapping(value = URI_API, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@RequestBody JsonNode value) {
@@ -56,13 +56,13 @@ public class ApiController {
 	@PostMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey create(@PathVariable String key, @RequestBody JsonNode value) {
 		StringKey sKey = slugger.slug(key);
-		jsonCache.put(sKey, new JsonVal(value));
+		cacheService.cache().put(sKey, new JsonVal(value));
 		return sKey;
 	}
 	@PutMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey update(@PathVariable String key, @RequestBody JsonNode value) {
 		StringKey sKey = new StringKey(key);
-		jsonCache.put(sKey, new JsonVal(value));
+		cacheService.cache().put(sKey, new JsonVal(value));
 		return sKey;
 	}
 	@GetMapping(value = URI_API + URI_BASE + DEFAULT_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -70,13 +70,13 @@ public class ApiController {
 		StringKey key = slugger.slug(null);
 		StrResponse rsp = new StrResponse();
 		rsp.setPayload(UUID.randomUUID().toString().replace("-", ""));
-		jsonCache.put(key, new JsonVal(objectMapper.valueToTree(rsp)));
+		cacheService.cache().put(key, new JsonVal(objectMapper.valueToTree(rsp)));
 		return key;
 	}
 	@GetMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody JsonNode read(@PathVariable String key) {
 		StringKey sKey = new StringKey(key);
-		JsonVal jsonVal = jsonCache.asMap().get(sKey);
+		JsonVal jsonVal = cacheService.cache().asMap().get(sKey);
 		if (jsonVal == null) {
 			throw new RasonException(NOT_FOUND);
 		}
@@ -88,12 +88,12 @@ public class ApiController {
 	}
 	@GetMapping(value = URI_API_KEYS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody Set<StringKey> keys() {
-		return jsonCache.asMap().keySet();
+		return cacheService.cache().asMap().keySet();
 	}
 	@DeleteMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody StringKey delete(@PathVariable String key) {
 		StringKey sKey = new StringKey(key);
-		jsonCache.invalidate(sKey);
+		cacheService.cache().invalidate(sKey);
 		return sKey;
 	}
 }

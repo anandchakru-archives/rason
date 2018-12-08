@@ -10,7 +10,15 @@ spring:
     banner-mode: "off"
 server:
   port: ${port:9090}
+  tomcat:
+    basedir: /tmp
+  session:
+    persistent: true
+  servlet:
+    session:
+      tracking-modes: cookie
 rason: 
+  maxSessionLifeMinutes: 600
   slugMaxLength: 50
   slugGenMaxRetry: 10
   maxCacheSize: 2000

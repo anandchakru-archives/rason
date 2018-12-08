@@ -1,6 +1,6 @@
 package rason.app.rest;
 
-import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
+import static rason.app.util.RasonConstant.BEAN_CACHE;
 import static rason.app.util.RasonConstant.BEAN_SLUGGER;
 import static rason.app.util.RasonConstant.URI_BU_LIST;
 import static rason.app.util.RasonConstant.URI_BU_MAP;
@@ -15,20 +15,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.github.benmanes.caffeine.cache.Cache;
 import rason.app.model.BulkUploadRsp;
 import rason.app.model.JsonVal;
 import rason.app.model.StringKey;
+import rason.app.service.CacheService;
 import rason.app.service.SluggerService;
 
 @RestController
 public class BulkUploadController {
 	@Autowired
-	@Qualifier(value = BEAN_JSON_CACHE)
-	private Cache<StringKey, JsonVal> jsonCache;
-	@Autowired
 	@Qualifier(value = BEAN_SLUGGER)
 	private SluggerService slugger;
+	@Autowired
+	@Qualifier(BEAN_CACHE)
+	private CacheService cacheService;
 
 	@PostMapping(value = URI_BU_MAP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody BulkUploadRsp bulkMap(@RequestBody Map<String, JsonNode> payload) {
@@ -38,7 +38,7 @@ public class BulkUploadController {
 			while (iterator.hasNext()) {
 				String reqKey = iterator.next();
 				StringKey sKey = slugger.slug(reqKey);
-				jsonCache.put(sKey, new JsonVal(payload.get(reqKey)));
+				cacheService.cache().put(sKey, new JsonVal(payload.get(reqKey)));
 				rsp.add(reqKey, sKey);
 			}
 		}
@@ -50,7 +50,7 @@ public class BulkUploadController {
 		if (payload != null && !payload.isEmpty()) {
 			for (JsonNode value : payload) {
 				StringKey sKey = slugger.slug(null);
-				jsonCache.put(sKey, new JsonVal(value));
+				cacheService.cache().put(sKey, new JsonVal(value));
 				rsp.add(sKey.getSlug(), sKey);
 			}
 		}

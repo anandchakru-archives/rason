@@ -1,6 +1,6 @@
 package rason.app.config;
 
-import static rason.app.util.RasonConstant.BEAN_JSON_CACHE;
+import static rason.app.util.RasonConstant.BEAN_CACHE;
 import static rason.app.util.RasonConstant.BEAN_JSON_OBJECMAPPER;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,7 @@ public class RasonConfig implements WebMvcConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**");
 	}
-	@Bean(name = { BEAN_JSON_CACHE })
+	@Bean(name = { BEAN_CACHE })
 	public Cache<StringKey, JsonVal> jsonCache() {
 		return Caffeine.newBuilder().maximumSize(settings.getMaxCacheSize())
 				.expireAfterWrite(settings.getMaxCacheLifeMinutes(), TimeUnit.MINUTES)
