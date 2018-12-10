@@ -48,7 +48,7 @@
         <div class="col-1 bg-secondary d-none d-md-block d-lg-block d-xl-block">
             <input type="text" class="form-control ip" #searchNotifications [ngModel]="searchNotificationsVal" (keyup)="search(searchNotifications.value)" placeholder="search">
             <div class="list-group">
-                <a href="#" (click)="loadUrl('api/'+key.slug)" class="list-group-item list-group-item-action" *ngFor="let key of slugs">{{key.slug}}</a>
+                <a href="#" (click)="loadUrl('api/'+ bucket + '/' + key.slug)" class="list-group-item list-group-item-action" *ngFor="let key of slugs">{{key.slug}}</a>
             </div>
         </div>
     </div>

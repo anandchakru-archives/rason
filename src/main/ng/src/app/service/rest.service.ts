@@ -17,14 +17,14 @@ export class RestService {
     })
   };
   constructor(private http: HttpClient) { }
-  cacheCount(): Observable<Key[]>{
-    return this.http.get<Key[]>('api/keys',this.httpOptions).pipe(catchError(this.handleError('cacheCount')));
+  cacheCount(bucket:string): Observable<Key[]>{
+    return this.http.get<Key[]>('api/'+bucket+'/keys',this.httpOptions).pipe(catchError(this.handleError('cacheCount')));
   }
-  checkSlug(slug:string):Observable<CheckSlugRsp>{
-    return this.http.get<CheckSlugRsp>('api/exists/'+slug, this.httpOptions).pipe(catchError(this.handleError('checkSlug',slug)));
+  checkSlug(bucket:string, slug:string):Observable<CheckSlugRsp>{
+    return this.http.get<CheckSlugRsp>('api/exists/'+bucket+'/'+slug, this.httpOptions).pipe(catchError(this.handleError('checkSlug',slug)));
   }
-  create (json: string, slug?:string): Observable<Key> {
-    return this.http.post<Key>('api/'+(slug && slug.length>0?slug:''),json,this.httpOptions).pipe(catchError(this.handleError('create',json)));
+  create (bucket:string, json: string, slug?:string): Observable<Key> {
+    return this.http.post<Key>('api/'+bucket+'/'+(slug && slug.length>0?slug:''),json,this.httpOptions).pipe(catchError(this.handleError('create',json)));
   }
   fetchJson(url:string):Observable<any>{
     return this.http.get<any>(url,this.httpOptions).pipe(catchError(this.handleError('fetchJson',url)))

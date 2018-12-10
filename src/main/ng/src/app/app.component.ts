@@ -20,6 +20,7 @@ import { DataPair } from './model/data.pair';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
+  bucket:string='rnd';
   err: string;
   disableBtnClass:string;
   urlClass: string;
@@ -54,7 +55,7 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.expanded=true;
     this.update(this.taInputVal);
-    this.rest.cacheCount().subscribe((key:Key[])=>{
+    this.rest.cacheCount(this.bucket).subscribe((key:Key[])=>{
       this.slugs = key;
     });
     this.slugSubSubs = this.slugSub.subscribe((dp:DataPair)=>{
@@ -157,7 +158,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   checkSlug(slug:string){
     if(slug && slug.length>4){
-      this.rest.checkSlug(slug).subscribe((rsp:CheckSlugRsp)=>{
+      this.rest.checkSlug(this.bucket,slug).subscribe((rsp:CheckSlugRsp)=>{
         if(rsp.exists){
           this.slugInputClass='border-danger';
         }else{
@@ -193,7 +194,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.resetBtnSaveJson();
     }, 2000);
     this.update(json);
-    this.rest.create(json, slug).subscribe((key:Key)=>{
+    this.rest.create(this.bucket, json, slug).subscribe((key:Key)=>{
       this.growliService.addAlert("Saved @" + key.slug, AlertType.SUCCESS);
       this.slugs.push(key);
       this.resetBtnSaveJson();
