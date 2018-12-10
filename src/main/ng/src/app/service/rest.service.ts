@@ -21,7 +21,7 @@ export class RestService {
     return this.http.get<Key[]>('api/keys',this.httpOptions).pipe(catchError(this.handleError('cacheCount')));
   }
   checkSlug(slug:string):Observable<CheckSlugRsp>{
-    return this.http.get<CheckSlugRsp>('cs/'+slug, this.httpOptions).pipe(catchError(this.handleError('checkSlug',slug)));
+    return this.http.get<CheckSlugRsp>('api/exists/'+slug, this.httpOptions).pipe(catchError(this.handleError('checkSlug',slug)));
   }
   create (json: string, slug?:string): Observable<Key> {
     return this.http.post<Key>('api/'+(slug && slug.length>0?slug:''),json,this.httpOptions).pipe(catchError(this.handleError('create',json)));

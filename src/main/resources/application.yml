@@ -13,5 +13,7 @@ server:
 rason: 
   slugMaxLength: 50
   slugGenMaxRetry: 10
+  maxBuckets: 50
   maxCacheSize: 2000
+  maxSessionLifeMinutes: 600
   maxCacheLifeMinutes: 14400

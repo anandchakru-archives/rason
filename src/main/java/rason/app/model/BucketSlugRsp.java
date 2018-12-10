@@ -1,6 +1,5 @@
 package rason.app.model;
 
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,7 +8,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuppressWarnings("serial")
-public class CheckSlugRsp implements Serializable {
+public class BucketSlugRsp extends StringKey {
 	private String bucket;
-	private Boolean exists;
 }

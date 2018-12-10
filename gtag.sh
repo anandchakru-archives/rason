@@ -1,6 +1,9 @@
 #!/bin/bash
-
 V_CURRENT=$(git describe --exact-match $(git rev-list --tags --date-order --max-count=1) --tags)
+if [ -z "$V_CURRENT" ]
+	then
+	V_CURRENT="1.0.0"
+fi
 echo -e "Current Version: $V_CURRENT"
 V_MAJOR=$(echo $V_CURRENT | cut -d. -f1)
 V_MINOR=$(echo $V_CURRENT | cut -d. -f2)

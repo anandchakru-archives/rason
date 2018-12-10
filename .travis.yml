@@ -12,6 +12,9 @@
 
 # FYI: Value for $TRAVIS_BUILD_DIR is /home/travis/build/anandchakru/rason
 
+jobs:
+  include:
+    if: tag IS present
 language: java
 install: 
 - mvn dependency:resolve

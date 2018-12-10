@@ -3,6 +3,7 @@ package rason.app.rest;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
+import static rason.app.TestUtil.BUCKET_ID;
 import static rason.app.TestUtil.mockGet;
 import static rason.app.util.RasonConstant.HB_PREFIX;
 import static rason.app.util.RasonConstant.URI_HB;
@@ -40,7 +41,8 @@ public class MetaControllerTest {
 	}
 	@Test
 	public void testStats() throws Exception {
-		CacheStatsResponse stats = mockGet(mockMvc, URI_STATS, CacheStatsResponse.class, true);
+		CacheStatsResponse stats = mockGet(mockMvc, URI_STATS.replace("{bucketId}", BUCKET_ID),
+				CacheStatsResponse.class, true);
 		assertEquals(stats.getMax(), Long.valueOf(50));
 	}
 }

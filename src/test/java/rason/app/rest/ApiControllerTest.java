@@ -4,6 +4,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
+import static rason.app.TestUtil.BUCKET_ID;
 import static rason.app.TestUtil.JSON_1;
 import static rason.app.TestUtil.JSON_2;
 import static rason.app.TestUtil.JSON_INVALID;
@@ -27,7 +28,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import rason.app.config.RasonConfig;
-import rason.app.model.StringKey;
+import rason.app.model.BucketSlugRsp;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -51,7 +52,8 @@ public class ApiControllerTest {
 	}
 	@Test
 	public void testMakeRandom() {
-		StringKey key = mockGet(mockMvc, URI_API + URI_BASE + DEFAULT_KEY, StringKey.class, true);
+		BucketSlugRsp key = mockGet(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + DEFAULT_KEY,
+				BucketSlugRsp.class, true);
 		assertNotNull(key);
 		assertNotNull(key.getSlug());
 		String value = read(key.getSlug(), mockMvc);

@@ -3,6 +3,7 @@ package rason.app.rest;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
+import static rason.app.TestUtil.BUCKET_ID;
 import static rason.app.TestUtil.JSON_INVALID;
 import static rason.app.TestUtil.create;
 import static rason.app.TestUtil.mockGet;
@@ -37,7 +38,8 @@ public class RasonControllerAdviceTest {
 	}
 	@Test
 	public void testHandleRasonException() {
-		FaultResponse rsp = to(mockGet(mockMvc, URI_API + URI_BASE + "noslug", JsonNode.class, true),
+		FaultResponse rsp = to(
+				mockGet(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + "noslug", JsonNode.class, true),
 				FaultResponse.class);
 		assertNotNull(rsp);
 		assertNotNull(rsp.getFault());
