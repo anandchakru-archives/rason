@@ -56,7 +56,8 @@
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-light fixed-bottom">
     <div class="container-fluid">
-        <span class="text-white" (click)="showVersion()">simple scalable service virtualization (json).</span>
+        <span class="text-white">simple scalable service virtualization (json).
+        <code (click)="showVersion()" class="pointer">{{version.tag}}</code></span>
     </div>
 </nav>
 
@@ -67,6 +68,7 @@
     {{version | json}}
 </div>
 
+<!-- custom slug modal -->
 <div class="modal fade" id="slugIpModal" [ngClass]="slugInputModalClass" [ngStyle]="slugInputModalStyle">
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content">

@@ -24,6 +24,7 @@ bin/
 *.sublime-workspace
 *.log
 *.tmp
+*.pid
 *.log*.gz
 
 

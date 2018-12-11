@@ -8,6 +8,9 @@ spring:
     name: rason	
   main: 
     banner-mode: "off"
+  pid:
+    fail-on-write-error: true
+    file: ${spring.application.name}.pid
 server:
   port: ${port:9090}
 rason: 

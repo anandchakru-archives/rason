@@ -243,6 +243,6 @@ export class AppComponent implements OnInit, OnDestroy {
     return false;
   }
   showVersion(){
-    this.growliService.addAlert(JSON.stringify(this.version), AlertType.INFO);
+    this.growliService.addAlert('Hash:'+this.version.hash, AlertType.INFO);
   }
 }
