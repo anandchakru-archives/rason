@@ -9,8 +9,14 @@
 
 app-growli{
     position: absolute;
-    left: 8px;
     right: 8px;
     bottom: 8px;
     z-index: 9999;
+}
+
+
+@media (max-width: 768px) {
+    app-growli{
+        left: 8px;
+    }
 }
