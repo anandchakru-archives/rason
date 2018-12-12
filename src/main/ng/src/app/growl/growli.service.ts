@@ -34,7 +34,7 @@ export class GrowliService {
         }
     }
 
-    public addAlert(message: string, type: AlertType, autoClose?: number, dismissable?: boolean): void {
+    public addAlert(message: string, type: AlertType, autoClose?: number, dismissable?: boolean, small?: boolean): void {
         if (this.alertHolder.length >= this.alertCount) {
             // remove the oldest alert
             this._removeAlertById(0, this.alertHolder, this.alerts);
@@ -43,7 +43,7 @@ export class GrowliService {
             dismissable = true;
         }
         let cssType = this._convertTypeToCssClass(type);
-        let alert = {message: message, type: cssType, dismissable: dismissable};
+        let alert = {message: message, type: cssType, dismissable: dismissable, small: small};
         this.alertHolder.push(alert);
         this.alerts.next(this.alertHolder);
         if (autoClose && autoClose > -1) {

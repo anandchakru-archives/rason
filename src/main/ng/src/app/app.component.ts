@@ -24,7 +24,6 @@ export class AppComponent implements OnInit, OnDestroy {
   disableBtnClass:string;
   urlClass: string;
   txtClass:string;
-  searchNotificationsVal:string;
   urlInputVal: string;
   taInputVal: string='{}';
   inputJson: JSON;
@@ -122,6 +121,11 @@ export class AppComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.btnExpandCollapse.nativeElement.disabled=false;
     }, 0);
+  }
+  updateUrlByEnter(url:string, event){
+    if (event.key === "Enter") {
+      this.updateUrl(url);
+    }
   }
   private updateUrl(url:string){
     if(!url || url.length==0 || url===this.urlInputVal){
@@ -276,6 +280,6 @@ export class AppComponent implements OnInit, OnDestroy {
     return false;
   }
   showVersion(){
-    this.growliService.addAlert(JSON.stringify(this.version), AlertType.INFO);
+    this.growliService.addAlert(JSON.stringify(this.version, null,2), AlertType.INFO, this.growliService.autoClose, true, true);
   }
 }

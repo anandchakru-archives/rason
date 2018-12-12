@@ -1,5 +1,3 @@
-@import "~bootstrap-scss/bootstrap.scss";
-
 // Pulse 4.1.3 - https://bootswatch.com/4/pulse/_variables.scss
 // Bootswatch
 
@@ -254,3 +252,5 @@ $list-group-disabled-color:         lighten($list-group-bg, 30%) !default;
       }
     }
   }
+
+  @import "~bootstrap-scss/bootstrap.scss";
