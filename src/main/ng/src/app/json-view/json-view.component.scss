@@ -3,6 +3,7 @@
 @import '~bootstrap/scss/_variables.scss';
 .json-viewer{
   border-left: 1px solid $secondary;
+  overflow: scroll;
 }
 .rep-obj {
   display: flex;
