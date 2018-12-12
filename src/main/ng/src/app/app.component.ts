@@ -1,5 +1,4 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
-import { NgcCookieConsentService, NgcNoCookieLawEvent, NgcStatusChangeEvent, NgcInitializeEvent } from 'ngx-cookieconsent';
 import { Subscription, timer, Subject } from 'rxjs';
 import { ClipService } from './service/clip.service';
 import { RestService } from './service/rest.service';
@@ -10,9 +9,9 @@ import { LoadiComponent } from './load/loadi/loadi.component';
 import { Loadi } from './model/loadi';
 import { JsonViewComponent } from './json-view/json-view.component';
 import { VERSION } from 'src/environments/version';
-//import * as $ from 'jquery';
 import { CheckSlugRsp } from './model/checkSlug.rsp';
 import { DataPair } from './model/data.pair';
+import { DebounceService } from './service/debounce.service';
 
 @Component({
   selector: 'app-root',
@@ -32,6 +31,7 @@ export class AppComponent implements OnInit, OnDestroy {
   expanded: boolean;
   copied: boolean = false;
   hideUrl:boolean=true;
+  processingJson: boolean = false;
   slugInputModalClass:string='';
   slugInputClass:string='';
   slugInputModalStyle:any={"display": "none"};
@@ -39,6 +39,9 @@ export class AppComponent implements OnInit, OnDestroy {
   version = VERSION;
   slugSub:Subject<DataPair>  = new Subject();
   slugSubSubs:Subscription;
+  debouncedUpdate: Function;
+  processingJsonStyle: any={'width':'0%'}
+  processingJsonTimers:any[]=new Array();
   @ViewChild('btnBeautifyJson') btnBeautifyJson: ElementRef;
   @ViewChild('btnUglyJson') btnUglyJson: ElementRef;
   @ViewChild('btnSaveJson') btnSaveJson: ElementRef;
@@ -51,7 +54,12 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private clip: ClipService, 
     private renderer2: Renderer2, 
     private rest: RestService,
-    private growliService: GrowliService) { }
+    private growliService: GrowliService,
+    public debounceService: DebounceService) {
+      this.debouncedUpdate = this.debounceService.debounce((input:string) => {
+        this.update(input);
+      }, 1000);
+    }
   ngOnInit(): void {
     this.expanded=true;
     this.update(this.taInputVal);
@@ -62,6 +70,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this.createJson(dp.val, undefined, dp.key.slug);
     });
   }
+
   ngOnDestroy(): void {
     this.slugSubSubs.unsubscribe();
   }
@@ -78,7 +87,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.renderer2.removeClass(this.btnBeautifyJson.nativeElement, 'btn-success');
         this.renderer2.addClass(this.btnBeautifyJson.nativeElement, 'btn-primary');
         if(this.copied){
-          this.growliService.addAlert("Copied to clipboard.", AlertType.SUCCESS);
+          this.growliService.addAlert("Copied formatted to clipboard.", AlertType.SUCCESS);
         }
       }, 1000);
       this.hideLoadi(loadi);
@@ -97,18 +106,22 @@ export class AppComponent implements OnInit, OnDestroy {
         this.renderer2.removeClass(this.btnUglyJson.nativeElement, 'btn-success');
         this.renderer2.addClass(this.btnUglyJson.nativeElement, 'btn-primary');
         if(this.copied){
-          this.growliService.addAlert("Copied to clipboard.", AlertType.SUCCESS);
+          this.growliService.addAlert("Copied compressed to clipboard.", AlertType.SUCCESS);
         }
       }, 1000);
       this.hideLoadi(loadi);
     }
   }
   expCollapse() {
+    this.btnExpandCollapse.nativeElement.disabled=true;
     if (this.expanded) {
       this.expanded = false;
     } else {
       this.expanded = true;
     }
+    setTimeout(() => {
+      this.btnExpandCollapse.nativeElement.disabled=false;
+    }, 0);
   }
   private updateUrl(url:string){
     if(!url || url.length==0 || url===this.urlInputVal){
@@ -139,23 +152,43 @@ export class AppComponent implements OnInit, OnDestroy {
       this.inputJson = JSON;
       this.disableBtnClass='disabled';
       this.txtClass='border-danger';
-      return;
+    }else{
+      try {
+        this.err = undefined;
+        this.inputJson = JSON.parse(input);
+        this.disableBtnClass='';
+        this.txtClass='';
+      } catch (e) {
+        this.err = e.message;
+        this.inputJson = JSON;
+        this.disableBtnClass='disabled';
+        this.txtClass='border-danger';
+      }
     }
-    let loadi:Loadi = this.showLoadi('loading', 25000);
-    try {
-      this.err = undefined;
-      this.inputJson = JSON.parse(input);
-      this.disableBtnClass='';
-      this.txtClass='';
-      this.hideLoadi(loadi);
-    } catch (e) {
-      this.err = e.message;
-      this.inputJson = JSON;
-      this.disableBtnClass='disabled';
-      this.txtClass='border-danger';
-      this.hideLoadi(loadi);
-    }
+    setTimeout(()=>{this.resetProgress();}, 200);
   }
+  showProcessing(){
+    this.resetProgress();
+    this.processingJsonStyle = {'width':'0%'};
+    let width = 0;
+    this.processingJsonTimers.push(setInterval(()=>{
+      this.processingJsonStyle = {'width': (width+=5) + '%'};
+      if(width>100){
+        width=0;
+      }
+    },200));
+
+    this.processingJson = true;
+    setTimeout(()=>{this.resetProgress();}, 25000);
+  }
+  private resetProgress() {
+    this.processingJsonStyle = { 'width': '100%' };
+    this.processingJson = false;
+    this.processingJsonTimers.forEach((timer) => {
+      clearInterval(timer);
+    });
+  }
+
   checkSlug(slug:string){
     if(slug && slug.length>4){
       this.rest.checkSlug(this.bucket,slug).subscribe((rsp:CheckSlugRsp)=>{
@@ -243,6 +276,6 @@ export class AppComponent implements OnInit, OnDestroy {
     return false;
   }
   showVersion(){
-    this.growliService.addAlert('Hash:'+this.version.hash, AlertType.INFO);
+    this.growliService.addAlert(JSON.stringify(this.version), AlertType.INFO);
   }
 }

@@ -15,16 +15,17 @@
             </div>
             <div class="btn-group" role="group" aria-label="Rason Cache Options">
                 <button #btnSaveJson type="button" class="btn btn-info" [ngClass]="disableBtnClass" title="Save to Rason Cache" (click)="createJson(tainput.value, $event)"><i class="fas fa-upload"></i></button>
-                <button #btnUrl type="button" class="btn btn-info" title="Load from url" (click)="toggleHideUrl()"><i class="fas fa-location-arrow"></i></button>
+                <button #btnUrl type="button" class="btn btn-info" title="Load from url" (click)="toggleHideUrl()"><i class="fas fa-globe-americas"></i></button>
+                <button #btnInfo type="button" class="btn btn-info" title="Load from url" (click)="showVersion()"><i class="fas fa-info"></i></button>
             </div>
         </div>
     </div>
 </nav>
 
 
-<div class="container-fluid">
+<div class="container-fluid p-4">
     <div class="row">
-        <div class="col-11">
+        <div class="col-12">
             <div class="row" [hidden]="hideUrl">
                 <div class="col-12">
                     <div class="form-group">
@@ -35,31 +36,42 @@
             <div class="row">
                 <div class="col-12">
                     <div class="form-group hundred">
-                        <textarea id="tainput" class="form-control ip" [ngClass]="txtClass" #tainput [ngModel]="taInputVal" (keyup)="update(tainput.value)" placeholder='{"id":"1","name":"rason"}'></textarea>
+                        <textarea id="tainput" class="form-control ip" [ngClass]="txtClass" #tainput [ngModel]="taInputVal" (focus)="tainput.select()" (keydown)="showProcessing()" (keyup)="debouncedUpdate(tainput.value)" placeholder='{"id":"1","name":"rason"}' autofocus></textarea>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <app-json-view #appJsonView [json]="inputJson" [expanded]="expanded" *ngIf="!err?.length"></app-json-view>
+                    <div class="progress">
+                        <div [hidden]="!processingJson" class="progress-bar bg-info" [ngStyle]="processingJsonStyle"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <app-json-view #appJsonView [parent]="'true'" [json]="inputJson" [expanded]="expanded" *ngIf="!err?.length"></app-json-view>
                 </div>
             </div>
         </div>
+        <!--
         <div class="col-1 bg-secondary d-none d-md-block d-lg-block d-xl-block">
             <input type="text" class="form-control ip" #searchNotifications [ngModel]="searchNotificationsVal" (keyup)="search(searchNotifications.value)" placeholder="search">
             <div class="list-group">
                 <a href="#" (click)="loadUrl('api/'+ bucket + '/' + key.slug)" class="list-group-item list-group-item-action" *ngFor="let key of slugs">{{key.slug}}</a>
             </div>
         </div>
+        -->
     </div>
 </div>
 
+<!--
 <nav class="navbar navbar-expand-sm bg-dark navbar-light fixed-bottom">
     <div class="container-fluid">
         <span class="text-white">simple scalable service virtualization (json).
         <code (click)="showVersion()" class="pointer">{{version.tag}}</code></span>
     </div>
 </nav>
+-->
 
 <app-cookie></app-cookie>
 <app-growli></app-growli>

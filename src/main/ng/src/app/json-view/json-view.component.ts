@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, AfterViewChecked, AfterViewInit } from '@angular/core';
 import * as _ from 'lodash';
 
 @Component({
@@ -6,11 +6,12 @@ import * as _ from 'lodash';
   templateUrl: './json-view.component.html',
   styleUrls: ['./json-view.component.scss']
 })
-export class JsonViewComponent implements OnInit, OnChanges {
+export class JsonViewComponent implements OnInit, OnChanges, AfterViewInit, AfterViewChecked {
 
   @Input() json: Array<any> | Object | any;
     @Input() expanded: boolean;
     items: Array<any> = [];
+    @Input() parent:boolean;
 
     constructor() {
     }
@@ -25,7 +26,14 @@ export class JsonViewComponent implements OnInit, OnChanges {
     ngOnChanges(changes: SimpleChanges) {
         this.items = _.map(this.json, (v, k) => { return this.createItem(v, k); });
     }
+    ngAfterViewChecked(){
 
+    }
+    ngAfterViewInit(){
+        if(this.parent){
+            console.log('AfterViewInit');
+        }
+    }
     createItem(value: any, key: any) {
         const item: any = {
             key: (_.isUndefined(key) || _.isNull(key)) ? '""' : key,

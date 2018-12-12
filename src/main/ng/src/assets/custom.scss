@@ -15,43 +15,21 @@ fontawesome as icon - http://gauger.io/fonticon | https://stackoverflow.com/a/39
 popper - https://github.com/MrFrankel/ngx-popper
 */
 
-
-$primary:#247BA0;
-$secondary:#C9D6DF;
-$success:#70C1B3;
-$danger:#FF1654;
-$info:#B2DBBF;
-$warning:#F47C79;
-$light:#F3FFBD;
-$dark:#50514F;
-
-
-
 // FONTS:
 @import url('https://fonts.googleapis.com/css?family=Quando|Roboto|Roboto+Mono');
 $font-family-sans-serif:      -apple-system, BlinkMacSystemFont, Quando, Roboto, "Segoe UI", "Helvetica Neue", Arial, Noto Sans, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 $font-family-monospace:       "Roboto Mono", SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 
 
-// BOOTSTRAP:
-@import "~bootstrap-scss/bootstrap.scss";
-
 .btn-group{
     margin-right: 10px;
 }
 
-.footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 60px;
-    line-height: 60px;
-    background-color: #f5f5f5;
-}
-body > app-root > .container-fluid {
-    padding: 10px 0 60px 0;
-}
-
 .pointer{
     cursor: pointer;
+}
+
+.progress{
+    height: 2px;
+    background: transparent;
 }

@@ -8,7 +8,7 @@ const { writeFileSync } = require('fs-extra');
 const hashCmd = spawnSync( 'git', [ 'rev-list','--tags','--date-order','--max-count=1' ] );
 const hash = hashCmd.stdout.toString().trim();
 const tagCmd = spawnSync( 'git', [ 'describe','--exact-match',hash,'--tags' ] );
-const op = {'hash':hash,'tag':tagCmd.stdout.toString().trim()};
+const op = {'version':tagCmd.stdout.toString().trim(), 'hash':hash};
 
 const file = resolve(__dirname, '..', 'src', 'environments', 'version.ts');
 
