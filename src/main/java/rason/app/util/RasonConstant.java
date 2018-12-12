@@ -7,11 +7,11 @@ public class RasonConstant {
 	public static final String URI_API_KEYS = "/api/{bucketId}/keys";
 	public static final String URI_API_WITH_KEY = "/api/{bucketId}/{key}";
 	public static final String URI_CHECK_SLUG = "/api/exists/{bucketId}/{key}";
-	public static final String URI_BU_MAP = "/bum/{bucketId}";
-	public static final String URI_BU_LIST = "/bul/{bucketId}";
+	public static final String URI_BU_MAP = "/api/bum/{bucketId}";
+	public static final String URI_BU_LIST = "/api/bul/{bucketId}";
 	//
-	public static final String URI_HB = "/hb";
-	public static final String URI_STATS = "/stats/{bucketId}";
+	public static final String URI_HB = "/api/hb";
+	public static final String URI_STATS = "/api/stats/{bucketId}";
 	//
 	public static final String DEFAULT_KEY = "rnd";
 	public static final String HB_PREFIX = "beat_";

@@ -30,6 +30,6 @@ export class RestService {
     return this.http.get<any>(url,this.httpOptions).pipe(catchError(this.handleError('fetchJson',url)))
   }
   handleError(arg0: string, json?: string): any {
-    console.log('error@: ' + arg0 + ':' + json);
+    console.log('error@: ' + arg0);
   }
 }

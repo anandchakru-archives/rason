@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2 } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, Inject } from '@angular/core';
 import { Subscription, timer, Subject } from 'rxjs';
 import { ClipService } from './service/clip.service';
 import { RestService } from './service/rest.service';
@@ -12,6 +12,7 @@ import { VERSION } from 'src/environments/version';
 import { CheckSlugRsp } from './model/checkSlug.rsp';
 import { DataPair } from './model/data.pair';
 import { DebounceService } from './service/debounce.service';
+import { WINDOW } from './service/window.service';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,6 @@ import { DebounceService } from './service/debounce.service';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit, OnDestroy {
-  bucket:string='rnd';
   err: string;
   disableBtnClass:string;
   urlClass: string;
@@ -30,14 +30,20 @@ export class AppComponent implements OnInit, OnDestroy {
   expanded: boolean;
   copied: boolean = false;
   hideUrl:boolean=true;
+  hideInputText:boolean=false;
   processingJson: boolean = false;
-  slugInputModalClass:string='';
-  slugInputClass:string='';
-  slugInputModalStyle:any={"display": "none"};
-  slugs: Key[];
   version = VERSION;
+  bucket:string='rnd';
+  bucketInputClass:string='';
+  bucketInputModalClass:string='';
+  bucketInputModalStyle:any={"display": "none"};
+
+  slugs: Key[];
   slugSub:Subject<DataPair>  = new Subject();
   slugSubSubs:Subscription;
+  slugInputClass:string='';
+  slugInputModalClass:string='';
+  slugInputModalStyle:any={"display": "none"};
   debouncedUpdate: Function;
   processingJsonStyle: any={'width':'0%'}
   processingJsonTimers:any[]=new Array();
@@ -54,7 +60,8 @@ export class AppComponent implements OnInit, OnDestroy {
     private renderer2: Renderer2, 
     private rest: RestService,
     private growliService: GrowliService,
-    public debounceService: DebounceService) {
+    public debounceService: DebounceService,
+    @Inject(WINDOW) private window: Window) {
       this.debouncedUpdate = this.debounceService.debounce((input:string) => {
         this.update(input);
       }, 1000);
@@ -68,6 +75,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.slugSubSubs = this.slugSub.subscribe((dp:DataPair)=>{
       this.createJson(dp.val, undefined, dp.key.slug);
     });
+    if(this.window.location.href.indexOf("/ng/")>0){
+      const subs = "/api" + this.window.location.href.substring(this.window.location.href.indexOf("/ng/")+3, this.window.location.href.length);
+      this.toggleHideUrl(this.api()+subs);
+    }
   }
 
   ngOnDestroy(): void {
@@ -123,7 +134,9 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 0);
   }
   updateUrlByEnter(url:string, event){
-    if (event.key === "Enter") {
+    if(event.ctrlKey && event.key === "Enter"){
+      this.openUrl(url);
+    }else if (event.key === "Enter") {
       this.updateUrl(url);
     }
   }
@@ -150,6 +163,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.urlClass = 'border-danger';
       this.hideLoadi(loadi);
     });
+  }
+  openUrl(url:string){
+    this.window.open(url, "_blank");
   }
   private update(input: string) {
     if (!input || !input.length) {
@@ -232,25 +248,40 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 2000);
     this.update(json);
     this.rest.create(this.bucket, json, slug).subscribe((key:Key)=>{
-      this.growliService.addAlert("Saved @" + key.slug, AlertType.SUCCESS);
+      this.growliService.addAlert("Saved @ " + this.api() + "/ng/" + key.bucket + "/" + key.slug, AlertType.SUCCESS);
       this.slugs.push(key);
       this.resetBtnSaveJson();
       this.hideSlugInputModal();
     });
   }
+  api():string{
+    return this.window.location.protocol + "//" + this.window.location.hostname + (this.window.location.port ? ':' + this.window.location.port: '');
+  }
+  
   hideSlugInputModal(){
     this.slugInputModalClass='';
     this.slugInputModalStyle={"display": "none"};
+  }
+  showBucketInputModal(){
+    this.bucketInputModalClass='show';
+    this.bucketInputModalStyle={"display": "block"};
+  }
+  hideBucketInputModal(){
+    this.bucketInputModalClass='';
+    this.bucketInputModalStyle={"display": "none"};
+  }
+  saveBucket(){
+    this.hideBucketInputModal();
   }
   resetBtnSaveJson(){
     this.renderer2.removeClass(this.btnSaveJson.nativeElement, 'btn-warning');
     this.renderer2.removeClass(this.btnSaveJson.nativeElement, 'disabled');
     this.renderer2.addClass(this.btnSaveJson.nativeElement, 'btn-info');
   }
-  toggleHideUrl(){
+  toggleHideUrl(url?:string){
     this.hideUrl=!this.hideUrl;
     if(!this.hideUrl && (!this.urlInputVal || !this.urlInputVal.length) && (!this.taInputVal || this.taInputVal.length==0 || this.taInputVal==='{}')){
-      this.updateUrl("https://api.github.com/repos/anandchakru/rason");
+      this.updateUrl(url?url:"https://api.github.com/repos/anandchakru/rason");
     }
   }
   showLoadi(msg?:string, timeout?:number, timeoutMsg?: string): Loadi{

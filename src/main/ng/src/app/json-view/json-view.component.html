@@ -1,4 +1,4 @@
-<div class="json-viewer">
+<div class="json-viewer" [ngClass]="parent?'json-viewer-parent':''">
   <div *ngFor="let it of items" class="item">
       <div class="rep-obj rounded" (click)="toggleOpend(it)">
           <div [class.pointer]="it.isExpandable" class="rounded">

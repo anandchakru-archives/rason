@@ -16,6 +16,8 @@
             <div class="btn-group" role="group" aria-label="Rason Cache Options">
                 <button #btnSaveJson type="button" class="btn btn-info" [ngClass]="disableBtnClass" title="Save to Rason Cache" (click)="createJson(tainput.value, $event)"><i class="fas fa-upload"></i></button>
                 <button #btnUrl type="button" class="btn btn-info" title="Load from url" (click)="toggleHideUrl()"><i class="fas fa-globe-americas"></i></button>
+                <button #btnInputText type="button" class="btn btn-info" title="Toggle Input Text Box" (click)="hideInputText=!hideInputText"><i class="fas fa-pencil-alt"></i></button>
+                <button #btnBucket type="button" class="btn btn-info" title="Change bucket" (click)="showBucketInputModal()"><i class="fas fa-suitcase-rolling"></i></button>
                 <button #btnInfo type="button" class="btn btn-info" title="Version Info" (click)="showVersion()"><i class="fas fa-info"></i></button>
             </div>
         </div>
@@ -32,13 +34,14 @@
                         <div class="input-group">
                             <input type="text" class="form-control ip" [ngClass]="urlClass" #urlInput [ngModel]="urlInputVal" placeholder="https://api.github.com/repos/anandchakru/rason" (keyup)="updateUrlByEnter(urlInput.value, $event)">
                             <span class="input-group-addon input-group-addon-btn bg-white">
+                                <button class="btn btn-primary" type="submit" (click)="openUrl(urlInput.value)" ><i class="fas fa-external-link-alt"></i></button>
                                 <button class="btn btn-primary" type="submit" (click)="updateUrl(urlInput.value)" ><i class="fas fa-download"></i></button>
                             </span>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" [hidden]="hideInputText">
                 <div class="col-12">
                     <div class="form-group hundred">
                         <textarea id="tainput" class="form-control ip" [ngClass]="txtClass" #tainput [ngModel]="taInputVal" (focus)="tainput.select()" (keydown)="showProcessing()" (keyup)="debouncedUpdate(tainput.value)" placeholder='{"id":"1","name":"rason"}' autofocus></textarea>
@@ -68,27 +71,52 @@
     {{version | json}}
 </div>
 
+<!-- custom bucket modal -->
+<div class="modal fade" id="bucketIpModal" [ngClass]="bucketInputModalClass" [ngStyle]="bucketInputModalStyle">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+      <div class="modal-content">
+
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Custom Bucket</h4>
+          <button type="button" class="close" (click)="hideBucketInputModal()">&times;</button>
+        </div>
+
+        <!-- Modal body -->
+        <div class="modal-body">
+            <input type="text" maxlength="10" class="form-control ip" [ngClass]="bucketInputClass" [(ngModel)]="bucket" #bucketInput placeholder="bucket">
+        </div>
+
+        <!-- Modal footer -->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-danger" (click)="saveBucket(bucketInput.value)">Save</button>
+        </div>
+
+      </div>
+    </div>
+</div>
+
 <!-- custom slug modal -->
 <div class="modal fade" id="slugIpModal" [ngClass]="slugInputModalClass" [ngStyle]="slugInputModalStyle">
     <div class="modal-dialog modal-sm modal-dialog-centered">
       <div class="modal-content">
-  
+
         <!-- Modal Header -->
         <div class="modal-header">
           <h4 class="modal-title">Custom Slug</h4>
           <button type="button" class="close" (click)="hideSlugInputModal()">&times;</button>
         </div>
-  
+
         <!-- Modal body -->
         <div class="modal-body">
             <input type="text" class="form-control ip" [ngClass]="slugInputClass" #slugInput (keyup)="checkSlug(slugInput.value)" placeholder="slug">
         </div>
-  
+
         <!-- Modal footer -->
         <div class="modal-footer">
             <button type="button" class="btn btn-danger" (click)="saveJson(slugInput.value, tainput.value)">Save</button>
         </div>
-  
+
       </div>
     </div>
 </div>

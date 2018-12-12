@@ -11,6 +11,7 @@ import static rason.app.util.RasonConstant.URI_BASE;
 import static rason.app.util.RasonConstant.URI_BU_LIST;
 import static rason.app.util.RasonConstant.URI_BU_MAP;
 import static rason.app.util.RasonConstant.URI_CHECK_SLUG;
+import static rason.app.util.RasonConstant.URI_STATS;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +32,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import rason.app.model.BucketSlugRsp;
 import rason.app.model.BulkUploadRsp;
+import rason.app.model.CacheStatsResponse;
 import rason.app.model.CheckSlugRsp;
 import rason.app.model.JsonVal;
 import rason.app.model.RasonException;
 import rason.app.model.StrResponse;
 import rason.app.model.StringKey;
+import rason.app.service.RasonSettings;
 import rason.app.service.SluggerService;
 
 @RestController
@@ -46,6 +49,8 @@ public class ApiController {
 	@Autowired
 	@Qualifier(BEAN_JSON_OBJECMAPPER)
 	public ObjectMapper objectMapper;
+	@Autowired
+	private RasonSettings settings;
 
 	@GetMapping(value = URI_CHECK_SLUG, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public @ResponseBody CheckSlugRsp exists(@PathVariable(name = "bucketId") String bucketKey,
@@ -138,5 +143,10 @@ public class ApiController {
 			}
 		}
 		return rsp;
+	}
+	@GetMapping(value = URI_STATS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CacheStatsResponse stats(@PathVariable(name = "bucketId") String bucketKey) {
+		return new CacheStatsResponse(slugger.cache(bucketKey).estimatedSize(), settings.getMaxCacheSize(),
+				settings.getMaxCacheLifeMinutes());
 	}
 }

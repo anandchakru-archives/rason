@@ -10,7 +10,7 @@ import { JsonViewComponent } from './json-view/json-view.component';
 import { HttpClientModule } from '@angular/common/http';
 import { GrowlModule } from './growl/growl.module';
 import { LoadModule } from './load/load.module';
-
+import { WINDOW_PROVIDERS } from './service/window.service';
 
 const cookieconfig: NgcCookieConsentConfig= {
   "cookie": {"domain": window.location.hostname},
@@ -48,6 +48,7 @@ const cookieconfig: NgcCookieConsentConfig= {
     LoadModule
   ],
   providers: [
+    WINDOW_PROVIDERS
   ],
   bootstrap: [AppComponent]
 })
