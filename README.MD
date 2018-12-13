@@ -1,5 +1,7 @@
 # RASON - json server
 
+[![Build Status](https://travis-ci.org/anandchakru/rason.svg?branch=master)](https://travis-ci.org/anandchakru/rason)
+
 Json Server to Cache json. Helps with mock/virtualize a REST service. Accessible across CORS.
 
 ## Live @ [here](https://rason.jrvite.com/index)
