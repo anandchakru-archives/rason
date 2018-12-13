@@ -248,6 +248,10 @@ export class AppComponent implements OnInit, OnDestroy {
     this.rest.create(this.bucket, json, slug).subscribe((key:BucketSlug)=>{
       this.growliService.addAlert("Saved @ " + this.api() + "/ng/" + key.bucket + "/" + key.slug, AlertType.SUCCESS);
       Utils.push(this.slugs, key.slug);
+      if(this.bucket!==key.bucket){
+        this.growliService.addAlert("Updating bucket ("+this.bucket+") to:" + key.bucket, AlertType.WARNING);
+        this.bucket = key.bucket;
+      }
       this.resetBtnSaveJson();
       this.hideSlugInputModal();
     });
