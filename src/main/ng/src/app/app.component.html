@@ -34,8 +34,9 @@
                         <div class="input-group">
                             <input type="text" class="form-control ip" [ngClass]="urlClass" #urlInput [ngModel]="urlInputVal" placeholder="https://api.github.com/repos/anandchakru/rason" (keyup)="updateUrlByEnter(urlInput.value, $event)">
                             <span class="input-group-addon input-group-addon-btn bg-white">
-                                <button class="btn btn-primary" type="submit" (click)="openUrl(urlInput.value)" ><i class="fas fa-external-link-alt"></i></button>
-                                <button class="btn btn-primary" type="submit" (click)="updateUrl(urlInput.value)" ><i class="fas fa-download"></i></button>
+                                <button class="btn btn-primary" type="Update JSON" (click)="updateJSON(urlInput.value, tainput.value)" [disabled]="txtClass.length>0"><i class="fas fa-save"></i></button>
+                                <button class="btn btn-primary" type="View Raw JSON" (click)="openUrl(urlInput.value)" [disabled]="urlInput.value.length==0"><i class="fas fa-external-link-alt"></i></button>
+                                <button class="btn btn-primary" type="Load from URL" (click)="updateUrl(urlInput.value)" [disabled]="urlInput.value.length==0"><i class="fas fa-download"></i></button>
                             </span>
                         </div>
                     </div>

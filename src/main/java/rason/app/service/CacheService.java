@@ -5,6 +5,8 @@ import static rason.app.util.RasonConstant.BEAN_JSON_OBJECMAPPER;
 import static rason.app.util.RasonConstant.BUCKET_KEY_MAX_LENGTH;
 import static rason.app.util.RasonConstant.BUCKET_KEY_MIN_LENGTH;
 import static rason.app.util.RasonConstant.NOT_FOUND;
+import static rason.app.util.RasonConstant.SLUG_KEY_MAX_LENGTH;
+import static rason.app.util.RasonConstant.SLUG_KEY_MIN_LENGTH;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,8 @@ public class CacheService {
 		return bucket;
 	}
 	private String slug(String bucket, String slug) {
-		if (!StringUtils.isAlphanumeric(slug) || StringUtils.length(slug) > settings.getSlugMaxLength()) {
+		if (!StringUtils.isAlphanumeric(slug) || StringUtils.length(slug) < SLUG_KEY_MIN_LENGTH
+				|| StringUtils.length(slug) > SLUG_KEY_MAX_LENGTH) {
 			slug = UUID.randomUUID().toString().replaceAll("-", "").substring(0, 7);
 		} else if (!exists(bucket, slug)) {
 			return slug;

@@ -13,7 +13,7 @@ export class RestService {
   httpOptions = {
     headers: new HttpHeaders({
       'Content-Type':  'application/json',
-      'Authorization': 'my-auth-token'
+      'Accept':  'application/json'
     })
   };
   constructor(private http: HttpClient) { }
@@ -25,6 +25,9 @@ export class RestService {
   }
   create (bucket:string, json: string, slug?:string): Observable<BucketSlug> {
     return this.http.post<BucketSlug>('api/'+bucket+'/'+(slug && slug.length>0?slug:''),json,this.httpOptions);
+  }
+  update (bucket:string, json: string, slug:string): Observable<BucketSlug> {
+    return this.http.put<BucketSlug>('api/'+bucket+'/'+slug,json,this.httpOptions);
   }
   fetchJson(url:string):Observable<any>{
     return this.http.get<any>(url,this.httpOptions);

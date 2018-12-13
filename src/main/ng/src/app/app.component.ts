@@ -246,15 +246,28 @@ export class AppComponent implements OnInit, OnDestroy {
     }, 2000);
     this.update(json);
     this.rest.create(this.bucket, json, slug).subscribe((key:BucketSlug)=>{
-      this.growliService.addAlert("Saved @ " + this.api() + "/ng/" + key.bucket + "/" + key.slug, AlertType.SUCCESS);
       Utils.push(this.slugs, key.slug);
       if(this.bucket!==key.bucket){
         this.growliService.addAlert("Updating bucket ("+this.bucket+") to:" + key.bucket, AlertType.WARNING);
         this.bucket = key.bucket;
       }
+      this.urlInputVal = this.api() + "/api/" + key.bucket + "/" + key.slug;
+      this.growliService.addAlert("Saved @ " + this.urlInputVal, AlertType.SUCCESS);
       this.resetBtnSaveJson();
       this.hideSlugInputModal();
     });
+  }
+  updateJSON(url: string, json: string){
+    const slug:string = url.replace(this.api()+"/api/" + this.bucket+"/",'');
+    if(Utils.isAlphaNumeric3To10(slug)){
+      this.rest.update(this.bucket, json, slug).subscribe((key:BucketSlug)=>{
+        Utils.push(this.slugs, key.slug);
+        this.urlInputVal = this.api() + "/api/" + key.bucket + "/" + key.slug;
+        this.growliService.addAlert("Updated @ " + this.urlInputVal, AlertType.SUCCESS);
+      });
+    }else{
+      this.growliService.addAlert(`Extracted slug ${slug} is invalid, from url ${url}` , AlertType.DANGER);
+    }
   }
   api():string{
     return this.window.location.protocol + "//" + this.window.location.hostname + (this.window.location.port ? ':' + this.window.location.port: '');

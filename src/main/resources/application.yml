@@ -14,7 +14,6 @@ spring:
 server:
   port: ${port:9090}
 rason: 
-  slugMaxLength: 50
   slugGenMaxRetry: 10
   maxBuckets: 50
   maxCacheSize: 2000

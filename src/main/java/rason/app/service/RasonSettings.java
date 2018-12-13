@@ -10,7 +10,6 @@ import lombok.Data;
 @SuppressWarnings("serial")
 @ConfigurationProperties(prefix = "rason", ignoreUnknownFields = true)
 public class RasonSettings implements Serializable {
-	private Integer slugMaxLength;
 	private Integer slugGenMaxRetry;
 	private Long maxBuckets;
 	private Long maxCacheSize;

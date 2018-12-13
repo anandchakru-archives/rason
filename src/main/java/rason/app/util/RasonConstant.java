@@ -26,6 +26,8 @@ public class RasonConstant {
 	//
 	public static final Integer BUCKET_KEY_MIN_LENGTH = 3;
 	public static final Integer BUCKET_KEY_MAX_LENGTH = 10;
+	public static final Integer SLUG_KEY_MIN_LENGTH = 3;
+	public static final Integer SLUG_KEY_MAX_LENGTH = 10;
 
 	private RasonConstant() {
 	}
