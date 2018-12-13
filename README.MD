@@ -2,7 +2,7 @@
 
 Json Server to Cache json. Helps with mock/virtualize a REST service. Accessible across CORS.
 
-## Live @ [here](https://rason.jrvite.com/)
+## Live @ [here](https://rason.jrvite.com/index)
 
 ## How TO
 
@@ -105,7 +105,7 @@ curl -is http://localhost:9090/api/stats/firstbckt
 - [x] CRUD on payload
 - [x] CORS enabled
 - [x] Stats
-- [x] Live Demo @ [here](https://rason.jrvite.com/)
+- [x] Live Demo @ [here](https://rason.jrvite.com/index)
 - [x] Bulk upload
 - [x] Random JSON
 - [x] JsonVal, a wrapper for JsonNode
