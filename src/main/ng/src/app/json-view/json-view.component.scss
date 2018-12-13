@@ -4,8 +4,9 @@
 .json-viewer{
   border-left: 1px solid $secondary;
 }
-.json-viewer-parent{
-  overflow: scroll;
+.json-viewer-parent {
+  overflow-y: scroll;
+  overflow-x: hidden;
 }
 .rep-obj {
   display: flex;
