@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Alert } from '../../model/alert';
+import { Alert } from '../../model/ui/alert';
 import { GrowliService } from '../growli.service';
 
 @Component({

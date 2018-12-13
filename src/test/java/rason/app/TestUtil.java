@@ -14,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static rason.app.util.RasonConstant.NOT_FOUND;
 import static rason.app.util.RasonConstant.URI_API;
 import static rason.app.util.RasonConstant.URI_BASE;
+import static rason.app.util.RasonConstant.URI_BUCKET;
 import static rason.app.util.RasonConstant.URI_BU_LIST;
 import static rason.app.util.RasonConstant.URI_BU_MAP;
 import java.io.IOException;
@@ -28,8 +29,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Maps;
-import rason.app.model.BucketSlugRsp;
-import rason.app.model.BulkUploadRsp;
+import rason.app.model.BucketSlug;
+import rason.app.model.BucketSlugs;
 
 public class TestUtil {
 	private static final ObjectMapper json = new ObjectMapper();
@@ -37,7 +38,7 @@ public class TestUtil {
 	public static final String JSON_2 = "{\"test2\":\"UpdatedJsonForTest\"}";
 	public static final String JSON_INVALID = "{\"test2\":\"UpdatedJsonForTest\"::}";
 	public static final String SLUG_404 = "{\"fault\":\"" + NOT_FOUND + "\"}";
-	public static final String BUCKET_ID = "bucket1";
+	public static final String BUCKET_ID = "firstbckt";
 	public static final Map<String, JsonNode> BUM = Maps.newHashMap();
 	public static final List<JsonNode> BUL = Lists.newArrayList();
 	static {
@@ -51,56 +52,59 @@ public class TestUtil {
 		}
 	}
 
-	public static BucketSlugRsp create(final MockMvc mockMvc) {
-		return mockRequest(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID), BucketSlugRsp.class, true, JSON_1);
+	public static BucketSlug create(final MockMvc mockMvc) {
+		return mockRequest(mockMvc, URI_API.replace(URI_BUCKET, BUCKET_ID), BucketSlug.class, true, JSON_1);
 	}
-	public static BucketSlugRsp create(final MockMvc mockMvc, String payload) {
-		return mockRequest(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID), BucketSlugRsp.class, true, payload);
+	public static BucketSlug create(final MockMvc mockMvc, String payload) {
+		return mockRequest(mockMvc, URI_API.replace(URI_BUCKET, BUCKET_ID), BucketSlug.class, true, payload);
+	}
+	public static <T> T create(final MockMvc mockMvc, String payload, Class<T> rspType) {
+		return mockRequest(mockMvc, URI_API.replace(URI_BUCKET, BUCKET_ID), rspType, true, payload);
 	}
 	public static String update(final String key, String value, final MockMvc mockMvc)
 			throws UnsupportedEncodingException, Exception {
 		String ukey = mockMvc
-				.perform(put(URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + key).header(ACCEPT, APPLICATION_JSON)
+				.perform(put(URI_API.replace(URI_BUCKET, BUCKET_ID) + URI_BASE + key).header(ACCEPT, APPLICATION_JSON)
 						.header(CONTENT_TYPE, APPLICATION_JSON).content(value))
 				.andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 		assertTrue(StringUtils.isNotEmpty(ukey));
-		assertNotNull(json.readValue(ukey, BucketSlugRsp.class));
-		return json.readValue(ukey, BucketSlugRsp.class).getSlug();
+		assertNotNull(json.readValue(ukey, BucketSlug.class));
+		return json.readValue(ukey, BucketSlug.class).getSlug();
 	}
 	public static String read(final String key, final MockMvc mockMvc) {
-		return mockGet(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + key, JsonNode.class, true)
+		return mockGet(mockMvc, URI_API.replace(URI_BUCKET, BUCKET_ID) + URI_BASE + key, JsonNode.class, true)
 				.toString();
 	}
 	public static String read(final String key, final MockMvc mockMvc, Boolean assrt) {
-		return mockGet(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + key, JsonNode.class, assrt)
+		return mockGet(mockMvc, URI_API.replace(URI_BUCKET, BUCKET_ID) + URI_BASE + key, JsonNode.class, assrt)
 				.toString();
 	}
 	public static String del(final String key, final MockMvc mockMvc) throws UnsupportedEncodingException, Exception {
 		String dKey = mockMvc
-				.perform(delete(URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + key)
+				.perform(delete(URI_API.replace(URI_BUCKET, BUCKET_ID) + URI_BASE + key)
 						.header(ACCEPT, APPLICATION_JSON).header(CONTENT_TYPE, APPLICATION_JSON))
 				.andDo(print()).andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
 		assertTrue(StringUtils.isNotEmpty(dKey));
-		assertNotNull(json.readValue(dKey, BucketSlugRsp.class));
-		return json.readValue(dKey, BucketSlugRsp.class).getSlug();
+		assertNotNull(json.readValue(dKey, BucketSlug.class));
+		return json.readValue(dKey, BucketSlug.class).getSlug();
 	}
-	public static BulkUploadRsp bum(final MockMvc mockMvc) {
+	public static BucketSlugs bum(final MockMvc mockMvc) {
 		String payload = "{}";
 		try {
 			payload = json.writeValueAsString(BUM);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return mockRequest(mockMvc, URI_BU_MAP.replace("{bucketId}", BUCKET_ID), BulkUploadRsp.class, true, payload);
+		return mockRequest(mockMvc, URI_BU_MAP.replace(URI_BUCKET, BUCKET_ID), BucketSlugs.class, true, payload);
 	}
-	public static BulkUploadRsp bul(final MockMvc mockMvc) {
+	public static BucketSlugs bul(final MockMvc mockMvc) {
 		String payload = "{}";
 		try {
 			payload = json.writeValueAsString(BUL);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
-		return mockRequest(mockMvc, URI_BU_LIST.replace("{bucketId}", BUCKET_ID), BulkUploadRsp.class, true, payload);
+		return mockRequest(mockMvc, URI_BU_LIST.replace(URI_BUCKET, BUCKET_ID), BucketSlugs.class, true, payload);
 	}
 	public static <T> T mockGet(final MockMvc mockMvc, String uri, Class<T> rspType, Boolean assrt) {
 		return mockRequest(mockMvc, uri, rspType, assrt, null);

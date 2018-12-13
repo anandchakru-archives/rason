@@ -7,10 +7,11 @@ import { NgcCookieConsentModule, NgcCookieConsentConfig } from 'ngx-cookieconsen
 import { AppComponent } from './app.component';
 import { CookieComponent } from './cookie/cookie.component';
 import { JsonViewComponent } from './json-view/json-view.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { GrowlModule } from './growl/growl.module';
 import { LoadModule } from './load/load.module';
 import { WINDOW_PROVIDERS } from './service/window.service';
+import { HttpErrorInterceptor } from './interceptor/intercept.service';
 
 const cookieconfig: NgcCookieConsentConfig= {
   "cookie": {"domain": window.location.hostname},
@@ -48,7 +49,12 @@ const cookieconfig: NgcCookieConsentConfig= {
     LoadModule
   ],
   providers: [
-    WINDOW_PROVIDERS
+    WINDOW_PROVIDERS,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpErrorInterceptor,
+      multi: true,
+    }
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,6 @@
 package rason.app.rest;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.springframework.core.env.AbstractEnvironment.DEFAULT_PROFILES_PROPERTY_NAME;
 import static rason.app.TestUtil.BUCKET_ID;
 import static rason.app.TestUtil.JSON_INVALID;
@@ -22,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.JsonNode;
 import rason.app.config.RasonConfig;
 import rason.app.model.FaultResponse;
-import rason.app.model.StringKey;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -39,14 +37,15 @@ public class RasonControllerAdviceTest {
 	@Test
 	public void testHandleRasonException() {
 		FaultResponse rsp = to(
-				mockGet(mockMvc, URI_API.replace("{bucketId}", BUCKET_ID) + URI_BASE + "noslug", JsonNode.class, true),
+				mockGet(mockMvc, URI_API.replace("{bucket}", BUCKET_ID) + URI_BASE + "noslug", JsonNode.class, true),
 				FaultResponse.class);
 		assertNotNull(rsp);
 		assertNotNull(rsp.getFault());
 	}
 	@Test
 	public void testHandleHttpMessageConversionException() {
-		StringKey create = create(mockMvc, JSON_INVALID);
-		assertNull(create);
+		FaultResponse fault = create(mockMvc, JSON_INVALID, FaultResponse.class);
+		assertNotNull(fault);
+		assertNotNull(fault.getFault());
 	}
 }

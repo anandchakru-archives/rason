@@ -2,17 +2,19 @@ import { Component, OnInit, OnDestroy, ViewChild, ElementRef, Renderer2, Inject 
 import { Subscription, timer, Subject } from 'rxjs';
 import { ClipService } from './service/clip.service';
 import { RestService } from './service/rest.service';
-import { Key } from './model/key';
 import { GrowliService } from './growl/growli.service';
-import { AlertType } from './model/alert';
+import { AlertType } from './model/ui/alert';
 import { LoadiComponent } from './load/loadi/loadi.component';
-import { Loadi } from './model/loadi';
+import { Loadi } from './model/ui/loadi';
 import { JsonViewComponent } from './json-view/json-view.component';
 import { VERSION } from 'src/environments/version';
-import { CheckSlugRsp } from './model/checkSlug.rsp';
-import { DataPair } from './model/data.pair';
+import { CheckSlugRsp } from './model/be/checkslug.rsp';
 import { DebounceService } from './service/debounce.service';
 import { WINDOW } from './service/window.service';
+import { BucketSlugs } from './model/be/bucketslugs';
+import { Jlob } from './model/be/jlob';
+import { BucketSlug } from './model/be/bucketslug';
+import { Utils } from './model/utils';
 
 @Component({
   selector: 'app-root',
@@ -38,8 +40,8 @@ export class AppComponent implements OnInit, OnDestroy {
   bucketInputModalClass:string='';
   bucketInputModalStyle:any={"display": "none"};
 
-  slugs: Key[];
-  slugSub:Subject<DataPair>  = new Subject();
+  slugs: BucketSlugs;
+  slugSub:Subject<Jlob>  = new Subject();
   slugSubSubs:Subscription;
   slugInputClass:string='';
   slugInputModalClass:string='';
@@ -69,11 +71,12 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.expanded=true;
     this.update(this.taInputVal);
-    this.rest.cacheCount(this.bucket).subscribe((key:Key[])=>{
+    this.rest.keys(this.bucket).subscribe((key:BucketSlugs)=>{
       this.slugs = key;
+      console.log(JSON.stringify(this.slugs));
     });
-    this.slugSubSubs = this.slugSub.subscribe((dp:DataPair)=>{
-      this.createJson(dp.val, undefined, dp.key.slug);
+    this.slugSubSubs = this.slugSub.subscribe((dp:Jlob)=>{
+      this.createJson(dp.value, undefined, dp.bucketSlug.slug);
     });
     if(this.window.location.href.indexOf("/ng/")>0){
       const subs = "/api" + this.window.location.href.substring(this.window.location.href.indexOf("/ng/")+3, this.window.location.href.length);
@@ -211,7 +214,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   checkSlug(slug:string){
     if(slug && slug.length>4){
-      this.rest.checkSlug(this.bucket,slug).subscribe((rsp:CheckSlugRsp)=>{
+      this.rest.exists(this.bucket,slug).subscribe((rsp:CheckSlugRsp)=>{
         if(rsp.exists){
           this.slugInputClass='border-danger';
         }else{
@@ -222,12 +225,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
   saveJson(slug:string, json:string){
     this.slugInputClass='';
-    const key:Key = new Key();
-    key.slug = slug;
-    const dp:DataPair = new DataPair();
-    dp.key=key;
-    dp.val = json;
-    this.slugSub.next(dp);
+    this.slugSub.next(new Jlob(new BucketSlug(this.bucket, slug), json));
   }
   createJson(json: string, event, slug?:string){
     if(event && event.shiftKey){
@@ -247,9 +245,9 @@ export class AppComponent implements OnInit, OnDestroy {
       this.resetBtnSaveJson();
     }, 2000);
     this.update(json);
-    this.rest.create(this.bucket, json, slug).subscribe((key:Key)=>{
+    this.rest.create(this.bucket, json, slug).subscribe((key:BucketSlug)=>{
       this.growliService.addAlert("Saved @ " + this.api() + "/ng/" + key.bucket + "/" + key.slug, AlertType.SUCCESS);
-      this.slugs.push(key);
+      Utils.push(this.slugs, key.slug);
       this.resetBtnSaveJson();
       this.hideSlugInputModal();
     });

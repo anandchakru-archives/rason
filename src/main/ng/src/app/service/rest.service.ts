@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { map, catchError } from 'rxjs/operators';
-import { Key } from '../model/key';
-import { CheckSlugRsp } from '../model/checkSlug.rsp';
+import { CheckSlugRsp } from '../model/be/checkslug.rsp';
+import { BucketSlugs } from '../model/be/bucketslugs';
+import { BucketSlug } from '../model/be/bucketslug';
 
 @Injectable({
   providedIn: 'root'
@@ -17,19 +17,16 @@ export class RestService {
     })
   };
   constructor(private http: HttpClient) { }
-  cacheCount(bucket:string): Observable<Key[]>{
-    return this.http.get<Key[]>('api/'+bucket+'/keys',this.httpOptions).pipe(catchError(this.handleError('cacheCount')));
+  keys(bucket:string): Observable<BucketSlugs>{
+    return this.http.get<BucketSlugs>('api/'+bucket+'/keys',this.httpOptions);
   }
-  checkSlug(bucket:string, slug:string):Observable<CheckSlugRsp>{
-    return this.http.get<CheckSlugRsp>('api/exists/'+bucket+'/'+slug, this.httpOptions).pipe(catchError(this.handleError('checkSlug',slug)));
+  exists(bucket:string, slug:string):Observable<CheckSlugRsp>{
+    return this.http.get<CheckSlugRsp>('api/exists/'+bucket+'/'+slug, this.httpOptions);
   }
-  create (bucket:string, json: string, slug?:string): Observable<Key> {
-    return this.http.post<Key>('api/'+bucket+'/'+(slug && slug.length>0?slug:''),json,this.httpOptions).pipe(catchError(this.handleError('create',json)));
+  create (bucket:string, json: string, slug?:string): Observable<BucketSlug> {
+    return this.http.post<BucketSlug>('api/'+bucket+'/'+(slug && slug.length>0?slug:''),json,this.httpOptions);
   }
   fetchJson(url:string):Observable<any>{
-    return this.http.get<any>(url,this.httpOptions).pipe(catchError(this.handleError('fetchJson',url)))
-  }
-  handleError(arg0: string, json?: string): any {
-    console.log('error@: ' + arg0);
+    return this.http.get<any>(url,this.httpOptions);
   }
 }

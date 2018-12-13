@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Loadi } from '../../model/loadi';
+import { Loadi } from '../../model/ui/loadi';
 
 @Component({
   selector: 'app-loadi',

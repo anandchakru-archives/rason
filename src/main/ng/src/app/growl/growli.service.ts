@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Alert, AlertType } from '../model/alert';
+import { Alert, AlertType } from '../model/ui/alert';
 import { Subject,Observable, timer } from 'rxjs';
 
 @Injectable({

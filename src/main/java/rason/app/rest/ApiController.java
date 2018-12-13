@@ -1,22 +1,16 @@
 package rason.app.rest;
 
-import static rason.app.util.RasonConstant.BEAN_JSON_OBJECMAPPER;
-import static rason.app.util.RasonConstant.BEAN_SLUGGER;
-import static rason.app.util.RasonConstant.DEFAULT_KEY;
-import static rason.app.util.RasonConstant.NOT_FOUND;
+import static rason.app.util.RasonConstant.BEAN_CACHE;
 import static rason.app.util.RasonConstant.URI_API;
 import static rason.app.util.RasonConstant.URI_API_KEYS;
 import static rason.app.util.RasonConstant.URI_API_WITH_KEY;
-import static rason.app.util.RasonConstant.URI_BASE;
 import static rason.app.util.RasonConstant.URI_BU_LIST;
 import static rason.app.util.RasonConstant.URI_BU_MAP;
-import static rason.app.util.RasonConstant.URI_CHECK_SLUG;
+import static rason.app.util.RasonConstant.URI_EXISTS;
+import static rason.app.util.RasonConstant.URI_RANDOM;
 import static rason.app.util.RasonConstant.URI_STATS;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
@@ -29,124 +23,63 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import rason.app.model.BucketSlugRsp;
-import rason.app.model.BulkUploadRsp;
+import rason.app.model.BucketSlug;
+import rason.app.model.BucketSlugs;
 import rason.app.model.CacheStatsResponse;
 import rason.app.model.CheckSlugRsp;
 import rason.app.model.JsonVal;
-import rason.app.model.RasonException;
-import rason.app.model.StrResponse;
-import rason.app.model.StringKey;
-import rason.app.service.RasonSettings;
-import rason.app.service.SluggerService;
+import rason.app.service.CacheService;
 
 @RestController
 public class ApiController {
 	@Autowired
-	@Qualifier(value = BEAN_SLUGGER)
-	private SluggerService slugger;
-	@Autowired
-	@Qualifier(BEAN_JSON_OBJECMAPPER)
-	public ObjectMapper objectMapper;
-	@Autowired
-	private RasonSettings settings;
+	@Qualifier(value = BEAN_CACHE)
+	private CacheService slugger;
 
-	@GetMapping(value = URI_CHECK_SLUG, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody CheckSlugRsp exists(@PathVariable(name = "bucketId") String bucketKey,
-			@PathVariable String key) {
-		return new CheckSlugRsp(bucketKey, slugger.cache(bucketKey).asMap().containsKey(new StringKey(key)));
+	@GetMapping(value = URI_EXISTS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody CheckSlugRsp exists(@PathVariable String bucket, @PathVariable String slug) {
+		return new CheckSlugRsp(bucket, slugger.exists(bucket, slug));
+	}
+	@PostMapping(value = URI_RANDOM, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody JsonNode random(@PathVariable String bucket) {
+		return slugger.random(bucket);
 	}
 	@PostMapping(value = URI_API, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BucketSlugRsp create(@PathVariable(name = "bucketId") String bucketKey,
-			@RequestBody JsonNode value) {
-		return create(bucketKey, null, value);
+	public @ResponseBody BucketSlug create(@PathVariable String bucket, @RequestBody JsonNode value) {
+		return create(bucket, null, value);
 	}
 	@PostMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BucketSlugRsp create(@PathVariable(name = "bucketId") String bucketKey,
-			@PathVariable String key, @RequestBody JsonNode value) {
-		StringKey sKey = slugger.keySlug(bucketKey, key);
-		slugger.cache(bucketKey).put(sKey, new JsonVal(value));
-		BucketSlugRsp bucketSlugRsp = new BucketSlugRsp(bucketKey);
-		bucketSlugRsp.setSlug(sKey.getSlug());
-		return bucketSlugRsp;
+	public @ResponseBody BucketSlug create(@PathVariable String bucket, @PathVariable String slug,
+			@RequestBody JsonNode value) {
+		return slugger.put(bucket, slug, new JsonVal(value));
 	}
 	@PutMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BucketSlugRsp update(@PathVariable(name = "bucketId") String bucketKey,
-			@PathVariable String key, @RequestBody JsonNode value) {
-		StringKey sKey = new StringKey(key);
-		slugger.cache(bucketKey).put(sKey, new JsonVal(value));
-		BucketSlugRsp bucketSlugRsp = new BucketSlugRsp(bucketKey);
-		bucketSlugRsp.setSlug(sKey.getSlug());
-		return bucketSlugRsp;
-	}
-	@GetMapping(value = URI_API + URI_BASE + DEFAULT_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BucketSlugRsp makeRandom(@PathVariable(name = "bucketId") String bucketKey) {
-		StringKey sKey = slugger.keySlug(bucketKey, null);
-		StrResponse rsp = new StrResponse();
-		rsp.setPayload(UUID.randomUUID().toString().replace("-", ""));
-		slugger.cache(bucketKey).put(sKey, new JsonVal(objectMapper.valueToTree(rsp)));
-		BucketSlugRsp bucketSlugRsp = new BucketSlugRsp(bucketKey);
-		bucketSlugRsp.setSlug(sKey.getSlug());
-		return bucketSlugRsp;
+	public @ResponseBody BucketSlug update(@PathVariable String bucket, @PathVariable String slug,
+			@RequestBody JsonNode value) {
+		return slugger.update(bucket, slug, new JsonVal(value));
 	}
 	@GetMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody JsonNode read(@PathVariable(name = "bucketId") String bucketKey, @PathVariable String key) {
-		StringKey sKey = new StringKey(key);
-		JsonVal jsonVal = slugger.cache(bucketKey).asMap().get(sKey);
-		if (jsonVal == null) {
-			throw new RasonException(NOT_FOUND);
-		}
-		JsonNode jsonNode = jsonVal.getVal();
-		if (jsonNode == null) {
-			throw new RasonException(NOT_FOUND);
-		}
-		return jsonNode;
-	}
-	@GetMapping(value = URI_API_KEYS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody Set<StringKey> keys(@PathVariable(name = "bucketId") String bucketKey) {
-		return slugger.cache(bucketKey).asMap().keySet();
+	public @ResponseBody JsonNode read(@PathVariable String bucket, @PathVariable String slug) {
+		return slugger.get(bucket, slug);
 	}
 	@DeleteMapping(value = URI_API_WITH_KEY, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BucketSlugRsp delete(@PathVariable(name = "bucketId") String bucketKey,
-			@PathVariable String key) {
-		StringKey sKey = new StringKey(key);
-		slugger.cache(bucketKey).invalidate(sKey);
-		BucketSlugRsp bucketSlugRsp = new BucketSlugRsp(bucketKey);
-		bucketSlugRsp.setSlug(sKey.getSlug());
-		return bucketSlugRsp;
+	public @ResponseBody BucketSlug delete(@PathVariable String bucket, @PathVariable String slug) {
+		return slugger.delete(bucket, slug);
 	}
 	@PostMapping(value = URI_BU_MAP, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BulkUploadRsp bulkMap(@PathVariable(name = "bucketId") String bucketKey,
-			@RequestBody Map<String, JsonNode> payload) {
-		BulkUploadRsp rsp = new BulkUploadRsp();
-		if (payload != null && !payload.isEmpty()) {
-			Iterator<String> iterator = payload.keySet().iterator();
-			while (iterator.hasNext()) {
-				String reqKey = iterator.next();
-				StringKey sKey = slugger.keySlug(bucketKey, reqKey);
-				slugger.cache(bucketKey).put(sKey, new JsonVal(payload.get(reqKey)));
-				rsp.add(reqKey, sKey);
-			}
-		}
-		return rsp;
+	public @ResponseBody BucketSlugs bulkMap(@PathVariable String bucket, @RequestBody Map<String, JsonNode> values) {
+		return this.slugger.putAll(bucket, values);
 	}
 	@PostMapping(value = URI_BU_LIST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody BulkUploadRsp create(@PathVariable(name = "bucketId") String bucketKey,
-			@RequestBody List<JsonNode> payload) {
-		BulkUploadRsp rsp = new BulkUploadRsp();
-		if (payload != null && !payload.isEmpty()) {
-			for (JsonNode value : payload) {
-				StringKey sKey = slugger.keySlug(bucketKey, null);
-				slugger.cache(bucketKey).put(sKey, new JsonVal(value));
-				rsp.add(sKey.getSlug(), sKey);
-			}
-		}
-		return rsp;
+	public @ResponseBody BucketSlugs bulkList(@PathVariable String bucket, @RequestBody List<JsonNode> values) {
+		return this.slugger.putAll(bucket, values);
+	}
+	@GetMapping(value = URI_API_KEYS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public @ResponseBody BucketSlugs keys(@PathVariable String bucket) {
+		return slugger.keys(bucket);
 	}
 	@GetMapping(value = URI_STATS, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public @ResponseBody CacheStatsResponse stats(@PathVariable(name = "bucketId") String bucketKey) {
-		return new CacheStatsResponse(slugger.cache(bucketKey).estimatedSize(), settings.getMaxCacheSize(),
-				settings.getMaxCacheLifeMinutes());
+	public @ResponseBody CacheStatsResponse stats(@PathVariable String bucket) {
+		return slugger.stats(bucket);
 	}
 }
