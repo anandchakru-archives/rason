@@ -68,9 +68,7 @@
 <app-cookie></app-cookie>
 <app-growli></app-growli>
 <app-loadi #loadiComponent></app-loadi>
-<div id="versionInfo" class="sr-only text-hide">
-    {{version | json}}
-</div>
+<div id="versionInfo" class="text-muted p-2">{{version.hash | slice:0:7}}<span class="pl-2 pr-2">❤</span>{{version.version}}</div>
 
 <!-- custom bucket modal -->
 <div class="modal fade" id="bucketIpModal" [ngClass]="bucketInputModalClass" [ngStyle]="bucketInputModalStyle">
